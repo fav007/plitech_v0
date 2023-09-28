@@ -1,0 +1,11 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+
+    <h2>{{ be.customers.name | upper}}</h2>
+        <h3>Identifiant: CL-{{be.pk}}</h3>
+        <p>Date : {{ be.date_entry | upper}}</p>
+        <p>Time : {{ be.time_entry }}</p>
+
+    <a href="{% url 'be-update' be.pk %}">Update</a>
+
+{% endblock content %}

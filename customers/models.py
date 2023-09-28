@@ -6,11 +6,7 @@ class Customers(models.Model):
     contact = models.CharField(max_length=10,unique=True)
     address = models.CharField(max_length=100)
     
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return f"{self.name} by {self.address}"
     
-
-
-
-
-# Create your models here.
+    

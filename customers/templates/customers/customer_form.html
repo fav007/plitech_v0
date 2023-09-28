@@ -1,6 +1,6 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-<h1>Add a New Post</h1>
+<h1>Add a New Customers</h1>
 
 <form method="post">
     {% csrf_token %}
@@ -8,4 +8,5 @@
     <input type="submit" value="Save">
 </form>
 
+<a href="{% url 'home' %}">Return</a>
 {% endblock content %}

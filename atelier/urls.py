@@ -24,3 +24,6 @@ urlpatterns = [
     path('entry/', include('entry.urls')),
     
 ]
+
+admin.site.site_header = 'Plitech Service Administration'
+admin.site.site_title = 'PLITECH'

@@ -1,0 +1,15 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Ticket Entry List</h1>
+
+<ul>
+    {% for be in bes %}
+        
+        <p> 
+            <a href="{% url 'be-details' be.id %}">BE N°{{be.id|stringformat:"05d"}} </a> {{be.date_entry }} - {{be.time_entry }} - {{be.customers.name|upper}}
+            - {{be.status}}
+        </p>
+
+    {% endfor %}
+</ul>
+{% endblock content %}

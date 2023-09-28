@@ -1,0 +1,17 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Add a New Items</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    
+    {% for form in formset %}
+      {{ form.as_table }}
+    {% endfor %}
+    
+    <input type="submit" value="Register invoice lines">
+  </form>
+  <a href="">Retour à la facture</a>
+
+{% endblock content %}

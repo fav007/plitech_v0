@@ -4,9 +4,14 @@
 
 <ul>
     {% for customer in customers %}
-        <li>{{ customer.name | upper}} by {{ customer.address }} 
-           | <a href="{% url 'customer-detail' customer.id %}">details</a>
+        <li>
+            <a href="{% url 'customer-detail' customer.id %}">CL N°{{customer.pk|stringformat:"05d"}}</a>
+            {{ customer.name | upper}} by {{ customer.address }}
         </li>
     {% endfor %}
 </ul>
+
+<a href="{% url 'home' %}">Return</a>
+
 {% endblock content %}
+
