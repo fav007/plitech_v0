@@ -10,15 +10,9 @@ from django.views.generic import TemplateView,ListView,DetailView,UpdateView,Del
 class HomePageView(TemplateView):
     template_name = "customers/home.html"
     
-    
-
-    
 class AboutPageView(TemplateView):
     template_name = 'customers/about.html'
     
-
-    
-
 
 class CustomerCreateView(CreateView):
     model = Customers
@@ -28,7 +22,7 @@ class CustomerCreateView(CreateView):
 
 class ListCustomers(ListView):
     model = Customers
-    template_name = 'Customers/list_client.html'
+    template_name = 'customers/list_client.html'
     context_object_name = 'customers'
     
 class CustomersDetailView(DetailView):
