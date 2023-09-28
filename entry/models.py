@@ -29,7 +29,7 @@ class BE_line(models.Model):
     
     qty = models.IntegerField(default=1)
     type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES)
-    be = models.ForeignKey(BE,on_delete=models.CASCADE)
+    be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
     
     def __str__(self) -> str:
         return f'{self.qty} {self.type} BE N° :{self.be.pk}'

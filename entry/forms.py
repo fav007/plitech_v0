@@ -25,7 +25,7 @@ class LineBEForm(forms.ModelForm):
         model = BE_line
         fields = '__all__'
         
-LineBEFormSet = inlineformset_factory(BE, BE_line,fields=('qty','type') , form=LineBEForm, extra=1 ,can_delete=True)
+#LineBEFormSet = inlineformset_factory(BE, BE_line,fields=('qty','type') , form=LineBEForm, extra=1 ,can_delete=True)
 
 
 

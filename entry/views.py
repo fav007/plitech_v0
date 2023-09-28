@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
 from .models import BE,BE_line
-from .forms import BEForm,LineBEFormSet
+from .forms import BEForm,LineBEForm
 from django.urls import reverse_lazy
 
 class BECreateView(CreateView):
@@ -29,11 +29,11 @@ class BEUpdateView(UpdateView):
 
 class AddLinesBEView(CreateView):
     model = BE_line
-    form_class = LineBEFormSet
+    form_class = LineBEForm
     template_name = 'entry/be_add_lines.html'  # Créez ce template
     success_url = reverse_lazy('be-list')  # Redirigez ici après l'ajout de lignes
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['be'] = BE.objects.get(pk=self.kwargs['pk'])
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['be'] = BE.objects.get(pk=self.kwargs['pk'])
+    #     return context
