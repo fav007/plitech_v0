@@ -27,8 +27,18 @@ class BE_line(models.Model):
         ('TPP','TPP'),
     ]
     
+    OWNER_CHOICES = [
+        ('Client','Client'),
+        ('Hanitra','Hanitra'),
+        ('Tojo','Tojo'),
+        ('Plitech','Plitech')
+    ]
+    
     qty = models.IntegerField(default=1)
-    type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES)
+    type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES,default='TPN')
+    length = models.IntegerField(default=2000)
+    width = models.IntegerField(default=1000)
+    owner = models.CharField(max_length=10,choices=OWNER_CHOICES,default='Client')
     be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
     
     def __str__(self) -> str:

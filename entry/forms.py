@@ -24,8 +24,11 @@ class LineBEForm(forms.ModelForm):
     class Meta:
         model = BE_line
         fields = '__all__'
+    type = forms.ChoiceField(
+        choices=BE_line.METAL_TYPE_CHOICES,
+        initial='TPN')
         
-#LineBEFormSet = inlineformset_factory(BE, BE_line,fields=('qty','type') , form=LineBEForm, extra=1 ,can_delete=True)
+LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can_delete=True)
 
 
 

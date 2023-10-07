@@ -8,13 +8,16 @@
         <p>Time : {{ be.time_entry }}</p>
 
         <h2>Ticket entry Lines</h2>
+        
     <ul>
         {% for line in be.be_lines.all %}
-            <li>{{ line.type }} - Quantity: {{ line.qty }} </li>
-            <!-- Display other line details here -->
+            <li> {{ line.qty | stringformat:'3s' }} ----- {{ line.type }} </li>
         {% endfor %}
+        <li><strong>Total Quantity: {{ total_qty }} </strong></li>
     </ul>
 
+
     <a href="{% url 'be-update' be.pk %}">Update</a>
+    <a href="{% url 'be-add_lines' be.pk %}">Add Lines</a>
 
 {% endblock content %}

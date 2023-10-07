@@ -7,7 +7,7 @@
         
         <p> 
             <a href="{% url 'be-details' be.id %}">BE N°{{be.id|stringformat:"05d"}} </a> {{be.date_entry }} - {{be.time_entry }} - {{be.customers.name|upper}}
-            - {{be.status}}
+            - {{be.status}} <a href="{% url 'be-add_lines' be.id %}">add lines</a>
         </p>
 
     {% endfor %}

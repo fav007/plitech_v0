@@ -2,16 +2,19 @@
 {% block content %}
 <h1>Add a New Items</h1>
 
-<form method="post">
-    {% csrf_token %}
-    {{ formset.management_form }}
-    
-    {% for form in formset %}
-      {{ form.as_table }}
+{% if items %}
+  <h2>List of Items:</h2>
+  <ul>
+    {% for item in items %}
+      <li>{{ item }}</li>
     {% endfor %}
-    
-    <input type="submit" value="Register invoice lines">
-  </form>
-  <a href="">Retour à la facture</a>
+  </ul>
+{% endif %}
 
+<h1>Create Ticket Entry Line</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Line</button>
+    </form>
 {% endblock content %}
