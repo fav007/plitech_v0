@@ -1,7 +1,10 @@
+from typing import Any
+from django.forms.models import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
-from .models import BE,BE_line,Customers
-from .forms import BEForm,LineBEForm,LineBEFormSet
+from .models import BE,BE_line,Customers,Invoice
+from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm
 from django.urls import reverse_lazy
 
 class BECreateView(CreateView):
@@ -41,14 +44,15 @@ class AddLinesBEView(CreateView):
     template_name = 'entry/be_add_lines.html'  # Créez ce template
       # Redirigez ici après l'ajout de lignes
     
-    def get_initial(self):
-        # Get the 'pk' from the URL
-        pk = self.kwargs.get('pk')
-        # Use get_object_or_404 to fetch the BE instance or return a 404 if it doesn't exist
-        be = get_object_or_404(BE, pk=pk)
-        # Return the initial data for the form
-        return {'be': be}
     
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        be = get_object_or_404(BE, pk=pk)
+        context = super().get_context_data(**kwargs)
+        context['form'] = LineBEForm(initial={'be':be})
+        context['items'] = be.be_lines.all()  # Replace this with your actual query
+        context['total'] = sum(i.qty * i.length * i.width / 2_000_000 for i in be.be_lines.all())
+        return context
     
     
     def form_valid(self, form):
@@ -60,15 +64,34 @@ class AddLinesBEView(CreateView):
         self.success_url = reverse_lazy('be-details', kwargs={'pk': pk})
         return super().form_valid(form)
     
-
-    # def form_valid(self, form):
-    #     be_id = self.kwargs.get('pk')  # Get the 'id' parameter from the URL
-    #     be = BE.objects.get(pk=be_id)
-    #     form.instance.be = be
-    #     return super().form_valid(form)
     
     
 def add_lines_be_view(request,pk):
     be = BE.objects.get(pk=pk)
     context={'be':be}
     return render(request,template_name='entry/try.html',context=context)
+
+
+class InvoiceCreateView(CreateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'entry/invoice_form.html'
+    success_url = reverse_lazy('invoice-list')
+    
+    # def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        
+    #     pk = self.kwargs.get('pk')
+    #     be = get_object_or_404(BE, pk=pk)
+    #     context = super().get_context_data(**kwargs)
+    #     context['form'] = InvoiceForm(initial={'be':be})
+    #     return context
+    # def form_valid(self, form):
+    #     be_id = self.kwargs['pk']
+    #     be = BE.objects.get(pk=be_id)
+    #     form.instance.be = be
+    #     return super().form_valid(form)
+    
+class InvoiceListView(ListView):
+    model = Invoice
+    template_name = 'entry/invoice_list.html'
+    context_object_name = 'invoices'

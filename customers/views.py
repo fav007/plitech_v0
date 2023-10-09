@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from customers.models import Customers
+from entry.models import BE_line
 from django.views.generic.edit import CreateView
 from .forms import CustomerForm
 from django.urls import reverse_lazy
@@ -9,6 +10,14 @@ from django.views.generic import TemplateView,ListView,DetailView,UpdateView,Del
 
 class HomePageView(TemplateView):
     template_name = "customers/home.html"
+    
+    def get_context_data(self, **kwargs):
+        
+        context = super().get_context_data(**kwargs)
+        unique_values_count = Customers.objects.values('name').distinct().count()
+        context['unique_values_count'] = unique_values_count
+        
+        return context
     
 class AboutPageView(TemplateView):
     template_name = 'customers/about.html'

@@ -3,7 +3,7 @@
     <h1> Ticket entry Details</h1>
 
     <h2>{{ be.customers.name | upper}}</h2>
-        <h3>Identifiant: CL-{{be.pk}}</h3>
+        <h3>Identifiant: BL-{{be.pk|stringformat:'05d'}}</h3>
         <p>Date : {{ be.date_entry | upper}}</p>
         <p>Time : {{ be.time_entry }}</p>
 
@@ -17,7 +17,8 @@
     </ul>
 
 
-    <a href="{% url 'be-update' be.pk %}">Update</a>
-    <a href="{% url 'be-add_lines' be.pk %}">Add Lines</a>
+    <a href="{% url 'be-update' be.pk %}"> Update </a> |
+    <a href="{% url 'be-add_lines' be.pk %}"> Add Lines </a> |
+    <a href="{% url 'invoice-create' be.pk %}"> Add Invoice </a> 
 
 {% endblock content %}

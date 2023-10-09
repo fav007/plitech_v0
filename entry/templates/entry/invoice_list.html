@@ -1,0 +1,15 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Ticket Entry List</h1>
+
+<ul>
+    {% for invoice in invoices %}
+        
+        <p> 
+        Inv-num:{{invoice.number}} date:{{invoice.date}} BE_Num: {{invoice.be.pk}}
+            {{invoice.be.customers.name}}
+    </p>
+
+    {% endfor %}
+</ul>
+{% endblock content %}

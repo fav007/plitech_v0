@@ -1,6 +1,7 @@
 from django.db import models
 from customers.models import Customers
 from django.utils import timezone
+import datetime
 
 class BE(models.Model):
     STATUS_CHOICES = [
@@ -17,7 +18,7 @@ class BE(models.Model):
     customers = models.ForeignKey(Customers,on_delete=models.CASCADE)
     
     def __str__(self) -> str:
-        return f"id:{self.pk} date:{self.date_entry} customers:{self.customers.name}"
+        return f"ref bl-{self.pk} date:{self.date_entry} for customers:{self.customers.name}"
 
 class BE_line(models.Model):
     METAL_TYPE_CHOICES = [
@@ -34,12 +35,46 @@ class BE_line(models.Model):
         ('Plitech','Plitech')
     ]
     
+    THICKNESS_CHOICES = [('30/100', '30/100'),
+        ('40/100', '40/100'),
+        ('50/100', '50/100'),
+        ('60/100', '60/100'),
+        ('7/10', '7/10'),
+        ('8/10', '8/10'),
+        ('9/10', '9/10'),
+        ('10/10', '10/10'),
+        ('11/10', '11/10'),
+        ('12/10', '12/10'),
+        ('15/10', '15/10'),
+        ('2 mm', '2 mm'),
+        ('3 mm','3 mm'),
+        ('4 mm','4 mm')
+        ]
     qty = models.IntegerField(default=1)
     type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES,default='TPN')
     length = models.IntegerField(default=2000)
     width = models.IntegerField(default=1000)
+    thickness = models.CharField(max_length=6,choices=THICKNESS_CHOICES,default='8/10')
     owner = models.CharField(max_length=10,choices=OWNER_CHOICES,default='Client')
     be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
     
     def __str__(self) -> str:
         return f'{self.qty} {self.type} BE N° :{self.be.pk}'
+    
+
+    
+class Invoice(models.Model):
+    number = models.IntegerField(unique=True)
+    date = models.DateField(default=datetime.date.today)
+    be = models.OneToOneField(BE,on_delete=models.CASCADE)
+    
+ 
+class InvoiceLine(models.Model):
+    qty = models.IntegerField(default=1)
+    item = models.CharField(max_length=20)
+    unit_price = models.IntegerField()
+    fini = models.IntegerField()
+    dvlp = models.IntegerField()
+    height = models.IntegerField()
+    description = models.CharField(max_length=200)
+    invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_line')   
