@@ -1,7 +1,8 @@
 {% extends 'customers/base.html' %}
 {% block content %}
 <h1>Homepage</h1>
+{% now 'D d M Y' %}
 <h2>Nombre client: {{ unique_values_count }}</h2>
-<h2>Total tôles</h2>
+<h2>Total pieces: {{ total_value }}</h2>
 <h2>Chiffres d'affaires</h2>
 {% endblock content %}

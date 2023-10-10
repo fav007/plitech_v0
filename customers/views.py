@@ -1,22 +1,26 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from customers.models import Customers
-from entry.models import BE_line
+from entry.models import BE_line,BE
 from django.views.generic.edit import CreateView
 from .forms import CustomerForm
 from django.urls import reverse_lazy
+from django.db.models import Sum, F
+
 
 from django.views.generic import TemplateView,ListView,DetailView,UpdateView,DeleteView
 
 class HomePageView(TemplateView):
     template_name = "customers/home.html"
     
+    
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
         unique_values_count = Customers.objects.values('name').distinct().count()
+        total_piece = BE_line.objects.aggregate(Sum('qty'))['qty__sum']
         context['unique_values_count'] = unique_values_count
-        
+        context['total_value'] = total_piece
         return context
     
 class AboutPageView(TemplateView):

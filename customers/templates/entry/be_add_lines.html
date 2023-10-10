@@ -20,4 +20,8 @@
         {{ form.as_p }}
         <button type="submit">Add Line</button>
     </form>
+  
+    <a href="{% url 'be-details' be.pk %}"> OK </a>
+    <!-- <button onclick="window.location.href='{% url 'be-list' %}'">OK</button> -->
+
 {% endblock content %}
