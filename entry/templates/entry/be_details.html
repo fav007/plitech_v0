@@ -11,13 +11,23 @@
         
     <ul>
         {% for line in be.be_lines.all %}
-            <li> {{ line.qty | stringformat:'3s' }} ----- {{ line.type }} </li>
+            <li> {{ line.qty | stringformat:'3s' }}
+                 {{ line.type }} 
+                 {{ line.thickness }}
+                 {{ line.length }} x {{ line.width }}
+                 [{{ line.owner }}]
+                 {% if line.length != 2_000 %}
+                 *
+                 {% endif %}
+            </li>
         {% endfor %}
+
+
         <li><strong>Total Quantity: {{ total_qty }} </strong></li>
     </ul>
 
 
-    <a href="{% url 'be-update' be.pk %}"> Update </a> |
+     <!-- <a href="{% url 'be-update' be.pk %}"> Update </a> | -->
     <a href="{% url 'be-add_lines' be.pk %}"> Add Lines </a> |
     <a href="{% url 'invoice-create' be.pk %}"> Add Invoice </a> 
 
