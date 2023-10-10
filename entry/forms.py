@@ -1,5 +1,5 @@
 from django import forms
-from .models import BE,BE_line,Invoice,InvoiceLine
+from .models import BE,BE_line,Invoice,InvoiceLine,Banknote
 from django.utils import timezone
 from django.forms import inlineformset_factory
 from datetime import datetime
@@ -41,6 +41,7 @@ LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
+        #exclude = ['be']
         fields = '__all__'
         
     date = forms.DateField(
@@ -49,12 +50,16 @@ class InvoiceForm(forms.ModelForm):
         input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],  # Formats de date acceptés
         initial=timezone.now)
     
-    be = forms.ModelChoiceField(queryset=BE.objects.all(),
-                                # widget=forms.Select(attrs={'disabled':'disabled'})
-                                )
+    # be = forms.ModelChoiceField(
+    #                          widget=forms.Select(attrs={'disabled':'disabled'})
+    #                             )
 
 class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
         fields = '__all__'
         
+class BanknoteForm(forms.ModelForm):
+    class Meta:
+        model = Banknote
+        exclude = ['total']

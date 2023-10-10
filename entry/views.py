@@ -3,8 +3,8 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
-from .models import BE,BE_line,Customers,Invoice,InvoiceLine
-from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm
+from .models import BE,BE_line,Customers,Invoice,InvoiceLine,Banknote
+from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm
 from django.urls import reverse_lazy
 
 class BECreateView(CreateView):
@@ -85,13 +85,38 @@ class InvoiceCreateView(CreateView):
     #     pk = self.kwargs.get('pk')
     #     be = get_object_or_404(BE, pk=pk)
     #     context = super().get_context_data(**kwargs)
-    #     context['form'] = InvoiceForm(initial={'be':be})
-    #     return context
+    #     context['be'] = be
+        
+    
+        # context['form'] = InvoiceForm(initial={'be' : be })
+        # return context
     # def form_valid(self, form):
     #     be_id = self.kwargs['pk']
     #     be = BE.objects.get(pk=be_id)
     #     form.instance.be = be
     #     return super().form_valid(form)
+    
+    # def get_initial(self):
+        
+    #     pk = self.kwargs.get('pk')
+    #     be = get_object_or_404(BE, pk=pk)
+    #     initial = super().get_initial()
+        
+    #     initial['be'] = be  # 'be' should match the field name in your InvoiceForm
+    #     return initial
+    def get_initial(self):
+        initial = super().get_initial()
+        pk = self.kwargs.get('pk')
+        be = get_object_or_404(BE, pk=pk)
+        initial['be'] = be
+        return initial
+
+    def form_valid(self, form):
+        # Get the ModelA instance based on the ID from the URL
+        be = get_object_or_404(BE, pk=self.kwargs['pk'])
+        # Associate the ModelA instance with ModelB and save
+        form.object = form.save()
+        return super().form_valid(form)
     
 class InvoiceListView(ListView):
     model = Invoice
@@ -103,3 +128,14 @@ class InvoiceAddLineView(CreateView):
     form_class = InvoiceLineForm
     template_name = 'entry/invoice_add_lines.html'
     success_url = reverse_lazy('invoice-list')
+    
+    
+def banknote_form(request):
+    context = {}
+    return render(request, 'banknote_form.html',context)
+
+class BanknoteCreateView(CreateView):
+    model = Banknote
+    form_class = BanknoteForm
+    template_name = 'entry/banknote_form.html'
+    success_url = reverse_lazy('home')

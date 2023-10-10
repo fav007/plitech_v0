@@ -70,9 +70,9 @@ class Invoice(models.Model):
     number = models.IntegerField(unique=True)
     date = models.DateField(default=timezone.now)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
-    total = models.IntegerField('Total machine fees')
-    total_sm = models.IntegerField('Total metal price')
-    discount = models.IntegerField('discount')
+    total = models.IntegerField('Total machine fees',default=0)
+    total_sm = models.IntegerField('Total metal price',default=0)
+    discount = models.IntegerField('discount',default=0)
     
  
 class InvoiceLine(models.Model):
@@ -84,3 +84,28 @@ class InvoiceLine(models.Model):
     height = models.IntegerField()
     description = models.CharField(max_length=200)
     invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')   
+    
+class Banknote(models.Model):
+    date = models.DateField(default=timezone.now)
+    b_20_000 = models.IntegerField(default=0)
+    b_10_000 = models.IntegerField(default=0)
+    b_5_000 = models.IntegerField(default=0)
+    b_2_000 = models.IntegerField(default=0)
+    b_1_000 = models.IntegerField(default=0)
+    b_500 = models.IntegerField(default=0)
+    b_200 = models.IntegerField(default=0)
+    b_100 = models.IntegerField(default=0)
+    total = models.IntegerField(default=0)
+    
+    def save(self, *args, **kwargs):
+        self.total = (
+            self.b_20_000 * 20_000 +
+            self.b_10_000 * 10_000 +
+            self.b_5_000 * 5_000 +
+            self.b_2_000 * 2_000 +
+            self.b_1_000 * 1_000 +
+            self.b_500 * 500 +
+            self.b_200 * 200 +
+            self.b_100 * 100
+        )
+        super(Banknote, self).save(*args, **kwargs)

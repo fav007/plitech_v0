@@ -8,7 +8,8 @@
         <p> 
         Inv-num:{{invoice.number}} date:{{invoice.date}} BE_Num: {{invoice.be.pk}}
             {{invoice.be.customers.name}}
-    </p>
+            MS Cost {{invoice.total}}
+        </p>
 
     {% endfor %}
 </ul>
