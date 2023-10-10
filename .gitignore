@@ -1,2 +1,42 @@
-db.sqlite3
-db.sqlite3_bk
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Static and media files (served by Django in development)
+staticfiles/
+media/
+
+# Secret key and settings
+*.secret_key
+
+# Environment-specific settings
+.env
+
+# IDE-specific files and directories
+.idea/
+.vscode/
+
+# Local development settings (e.g., development database settings)
+local_settings.py
+
+# Compiled Python files (bytecode)
+__pycache__/
+
+# Ignore .gitignore itself
+.gitignore
+
+# Ignore database migrations (use 'makemigrations' and 'migrate' to manage migrations)
+/migrations/
+
+# Ignore runtime Python files
+*.pyc
+
+# Ignore the virtual environment directory
+venv/
