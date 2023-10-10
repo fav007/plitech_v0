@@ -1,5 +1,5 @@
 from django import forms
-from .models import BE,BE_line,Invoice
+from .models import BE,BE_line,Invoice,InvoiceLine
 from django.utils import timezone
 from django.forms import inlineformset_factory
 from datetime import datetime
@@ -53,4 +53,8 @@ class InvoiceForm(forms.ModelForm):
                                 # widget=forms.Select(attrs={'disabled':'disabled'})
                                 )
 
+class InvoiceLineForm(forms.ModelForm):
+    class Meta:
+        model = InvoiceLine
+        fields = '__all__'
         

@@ -16,6 +16,8 @@ class CustomerForm(forms.ModelForm):
         if cleaned_name:
             # Convert the name to uppercase
             cleaned_name = cleaned_name.upper()
+        else:
+            raise forms.ValidationError("Give a name please")
         
         return cleaned_name
     

@@ -1,7 +1,7 @@
 from django.db import models
 from customers.models import Customers
 from django.utils import timezone
-import datetime
+from django.db.models import Sum, F
 
 class BE(models.Model):
     STATUS_CHOICES = [
@@ -15,7 +15,7 @@ class BE(models.Model):
     date_entry = models.DateField(default=timezone.now)
     time_entry = models.TimeField(default=timezone.now)
     status = models.CharField(max_length=1,choices=STATUS_CHOICES,default='E')
-    customers = models.ForeignKey(Customers,on_delete=models.CASCADE)
+    customers = models.ForeignKey(Customers,on_delete=models.CASCADE,related_name='bes')
     
     def __str__(self) -> str:
         return f"ref bl-{self.pk} date:{self.date_entry} for customers:{self.customers.name}"
@@ -57,6 +57,9 @@ class BE_line(models.Model):
     thickness = models.CharField(max_length=6,choices=THICKNESS_CHOICES,default='8/10')
     owner = models.CharField(max_length=10,choices=OWNER_CHOICES,default='Client')
     be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
+
+    def sm_count(self):
+        return (self.qty * self.length * self.width) / 2_000_000
     
     def __str__(self) -> str:
         return f'{self.qty} {self.type} BE N° :{self.be.pk}'
@@ -65,8 +68,11 @@ class BE_line(models.Model):
     
 class Invoice(models.Model):
     number = models.IntegerField(unique=True)
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateField(default=timezone.now)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
+    total = models.IntegerField('Total machine fees')
+    total_sm = models.IntegerField('Total metal price')
+    discount = models.IntegerField('discount')
     
  
 class InvoiceLine(models.Model):
@@ -77,4 +83,4 @@ class InvoiceLine(models.Model):
     dvlp = models.IntegerField()
     height = models.IntegerField()
     description = models.CharField(max_length=200)
-    invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_line')   
+    invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')   

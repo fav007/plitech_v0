@@ -3,8 +3,8 @@ from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
-from .models import BE,BE_line,Customers,Invoice
-from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm
+from .models import BE,BE_line,Customers,Invoice,InvoiceLine
+from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm
 from django.urls import reverse_lazy
 
 class BECreateView(CreateView):
@@ -52,6 +52,7 @@ class AddLinesBEView(CreateView):
         context['form'] = LineBEForm(initial={'be':be})
         context['items'] = be.be_lines.all()  # Replace this with your actual query
         context['total'] = sum(i.qty * i.length * i.width / 2_000_000 for i in be.be_lines.all())
+        context['be'] = be
         return context
     
     
@@ -61,7 +62,8 @@ class AddLinesBEView(CreateView):
         # Get the 'pk' of the related BE instance
         pk = self.object.be.pk
         # Use reverse_lazy to generate the 'be-details' URL with the 'pk' argument
-        self.success_url = reverse_lazy('be-details', kwargs={'pk': pk})
+        # self.success_url = reverse_lazy('be-details', kwargs={'pk': pk})
+        self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': pk})
         return super().form_valid(form)
     
     
@@ -95,3 +97,9 @@ class InvoiceListView(ListView):
     model = Invoice
     template_name = 'entry/invoice_list.html'
     context_object_name = 'invoices'
+
+class InvoiceAddLineView(CreateView):
+    model = InvoiceLine
+    form_class = InvoiceLineForm
+    template_name = 'entry/invoice_add_lines.html'
+    success_url = reverse_lazy('invoice-list')
