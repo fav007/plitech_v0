@@ -2,7 +2,19 @@
 {% block content %}
 <h1>Homepage</h1>
 {% now 'D d M Y' %}
-<h2>Nombre client: {{ unique_values_count }}</h2>
-<h2>Total pieces: {{ total_value }}</h2>
-<h2>Chiffres d'affaires</h2>
+
+<div>
+    <h3>Chiffres d'affaires</h3>
+        <h4>Cumul : {{ amount }} MGA</h4>
+        <h4>This month : </h4>
+        <h4>Last month : </h4>
+</div>
+<h3>CLIENT N°: {{ client_unique_values_count }}</h3>
+<h3>TOT. PCS: {{ sm_pcs }}</h3>
+<h3>TOT. EQV SM: {{ sm_eqv }}</h3>
+
+
+
+
+
 {% endblock content %}

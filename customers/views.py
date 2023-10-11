@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from customers.models import Customers
+from entry.models import Invoice
 from entry.models import BE_line,BE
 from django.views.generic.edit import CreateView
 from .forms import CustomerForm
@@ -17,10 +18,11 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
-        unique_values_count = Customers.objects.values('name').distinct().count()
-        total_piece = BE_line.objects.aggregate(Sum('qty'))['qty__sum']
-        context['unique_values_count'] = unique_values_count
-        context['total_value'] = total_piece
+
+        context['client_unique_values_count'] = Customers.objects.values('name').distinct().count()
+        context['sm_pcs'] = BE_line.objects.aggregate(Sum('qty'))['qty__sum']
+        context['sm_eqv'] = BE_line.objects.aggregate(Sum('sm_eqv'))['sm_eqv__sum']
+        context['amount'] = Invoice.objects.aggregate(Sum('total'))['total__sum'] + Invoice.objects.aggregate(Sum('total_sm'))['total_sm__sum']
         return context
     
 class AboutPageView(TemplateView):

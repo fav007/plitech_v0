@@ -26,6 +26,7 @@ class BEDetailsView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         be = self.get_object()  # Get the 'be' object for this view
+        context['pcs'] = sum(i.qty for i in be.be_lines.all())
         total_qty = sum(line.qty * line.width * line.length / 2_000_000 for line in be.be_lines.all())
 
         context['total_qty'] = total_qty
@@ -139,3 +140,8 @@ class BanknoteCreateView(CreateView):
     form_class = BanknoteForm
     template_name = 'entry/banknote_form.html'
     success_url = reverse_lazy('home')
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        last_banknote = Banknote.objects.order_by('-id').first()
+        context['last_banknote'] = last_banknote
+        return context

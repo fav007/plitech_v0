@@ -2,6 +2,16 @@
 {% block content %}
 <h1>Add an banknote</h1>
 
+<h4>Last banknote</h4>
+
+<div>
+    <p><em><small><strong>Date: {{last_banknote.date}}</strong></small></em></p>
+    <p><em><small><strong>Total: {{last_banknote.total}} MGA</strong></small></em></p>
+</div>
+
+<hr>
+
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

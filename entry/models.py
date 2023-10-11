@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from django.db import models
 from customers.models import Customers
 from django.utils import timezone
@@ -57,9 +58,11 @@ class BE_line(models.Model):
     thickness = models.CharField(max_length=6,choices=THICKNESS_CHOICES,default='8/10')
     owner = models.CharField(max_length=10,choices=OWNER_CHOICES,default='Client')
     be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
-
-    def sm_count(self):
-        return (self.qty * self.length * self.width) / 2_000_000
+    sm_eqv = models.FloatField(default=0)
+    
+    def save(self,*args,**kwargs) :
+        self.sm_eqv = self.length * self.width / 2_000_000     
+        return super(BE_line,self).save(*args,**kwargs)
     
     def __str__(self) -> str:
         return f'{self.qty} {self.type} BE N° :{self.be.pk}'

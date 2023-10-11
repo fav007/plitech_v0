@@ -30,7 +30,7 @@ class BEForm(forms.ModelForm):
 class LineBEForm(forms.ModelForm):
     class Meta:
         model = BE_line
-        fields = '__all__'
+        exclude = ['eq_sm']
         
     type = forms.ChoiceField(
         choices=BE_line.METAL_TYPE_CHOICES,
