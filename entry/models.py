@@ -58,7 +58,7 @@ class BE_line(models.Model):
     thickness = models.CharField(max_length=6,choices=THICKNESS_CHOICES,default='8/10')
     owner = models.CharField(max_length=10,choices=OWNER_CHOICES,default='Client')
     be = models.ForeignKey(BE,on_delete=models.CASCADE,related_name='be_lines')
-    sm_eqv = models.FloatField(default=0)
+    sm_eqv = models.DecimalField(default=0,decimal_places=6,max_digits=10)
     
     def save(self,*args,**kwargs) :
         self.sm_eqv = self.length * self.width / 2_000_000     
@@ -72,11 +72,10 @@ class BE_line(models.Model):
 class Invoice(models.Model):
     number = models.IntegerField(unique=True)
     date = models.DateField(default=timezone.now)
-    be = models.OneToOneField(BE,on_delete=models.CASCADE)
     total = models.IntegerField('Total machine fees',default=0)
     total_sm = models.IntegerField('Total metal price',default=0)
     discount = models.IntegerField('discount',default=0)
-    
+    be = models.OneToOneField(BE,on_delete=models.CASCADE)
  
 class InvoiceLine(models.Model):
     qty = models.IntegerField(default=1)

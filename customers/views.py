@@ -7,6 +7,7 @@ from django.views.generic.edit import CreateView
 from .forms import CustomerForm
 from django.urls import reverse_lazy
 from django.db.models import Sum, F
+from django.utils import timezone
 
 
 from django.views.generic import TemplateView,ListView,DetailView,UpdateView,DeleteView
@@ -18,6 +19,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         
         context = super().get_context_data(**kwargs)
+        
 
         context['client_unique_values_count'] = Customers.objects.values('name').distinct().count()
         context['sm_pcs'] = BE_line.objects.aggregate(Sum('qty'))['qty__sum']

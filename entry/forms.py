@@ -60,3 +60,9 @@ class BanknoteForm(forms.ModelForm):
     class Meta:
         model = Banknote
         exclude = ['total']
+
+    date = forms.DateField(
+        label='Date',
+        widget=forms.DateInput(attrs={'type': 'date'}),  # Utilisation d'un widget datepicker en HTML
+        input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],  # Formats de date acceptés
+        initial=timezone.now)

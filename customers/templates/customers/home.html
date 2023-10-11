@@ -4,9 +4,16 @@
 {% now 'D d M Y' %}
 
 <div>
-    <h3>Chiffres d'affaires</h3>
+    <h3>Revenues</h3>
         <h4>Cumul : {{ amount }} MGA</h4>
         <h4>This month : </h4>
+        <h4>Last month : </h4>
+</div>
+
+<div>
+    <h3>S.M. statistics in EQV.</h3>
+        <h4>Cumul : {{ sm_eqv |floatformat:1 }} sm or {{ sm_pcs }} pcs</h4>
+        <h4>This month : {{ total_sm_current_month }}</h4>
         <h4>Last month : </h4>
 </div>
 <h3>CLIENT N°: {{ client_unique_values_count }}</h3>
