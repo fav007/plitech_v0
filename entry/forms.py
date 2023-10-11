@@ -5,9 +5,6 @@ from django.forms import inlineformset_factory
 from datetime import datetime
 
 
-# class DateInput(forms.DateInput):
-#     input_type = 'date'
-
 class BEForm(forms.ModelForm):
     class Meta:
         model = BE
@@ -30,7 +27,7 @@ class BEForm(forms.ModelForm):
 class LineBEForm(forms.ModelForm):
     class Meta:
         model = BE_line
-        exclude = ['eq_sm']
+        exclude = ['sm_eqv']
         
     type = forms.ChoiceField(
         choices=BE_line.METAL_TYPE_CHOICES,
@@ -41,7 +38,6 @@ LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        #exclude = ['be']
         fields = '__all__'
         
     date = forms.DateField(
@@ -58,6 +54,7 @@ class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
         fields = '__all__'
+
         
 class BanknoteForm(forms.ModelForm):
     class Meta:
