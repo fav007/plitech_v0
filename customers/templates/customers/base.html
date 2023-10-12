@@ -4,8 +4,9 @@
     | <a href="{% url 'customer-list' %}">List of customers</a> 
     | <a href= "{% url 'be-list' %}">List of Entry</a> 
     | <a href="{% url 'invoice-list' %}">List Invoice</a> 
-    | <a href="{% url 'be-create' %}">Add Ticket entry</a> 
+    | <a href="{% url 'be-create' %}">Create a New Ticket Entry</a> 
     | <a href="{% url 'banknote-create' %}">Create Banknote</a>
+    | <a href="{% url 'invoice-add_lines' 10 %}">Create Invoice</a>
     
 </header>
 {% block content %}

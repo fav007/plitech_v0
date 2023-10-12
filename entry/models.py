@@ -61,11 +61,11 @@ class BE_line(models.Model):
     sm_eqv = models.DecimalField(default=0,decimal_places=6,max_digits=10)
     
     def save(self,*args,**kwargs) :
-        self.sm_eqv = self.length * self.width / 2_000_000     
+        self.sm_eqv = self.qty * self.length * self.width / 2_000_000     
         return super(BE_line,self).save(*args,**kwargs)
     
     def __str__(self) -> str:
-        return f'{self.qty} {self.type} BE N° :{self.be.pk}'
+        return f'{self.qty} {self.type} {self.thickness} {self.length}x{self.width} BE-{self.be.pk}'
     
 
     
@@ -76,6 +76,10 @@ class Invoice(models.Model):
     total_sm = models.IntegerField('Total metal price',default=0)
     discount = models.IntegerField('discount',default=0)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f'Inv{self.number} dated {self.date} '
  
 class InvoiceLine(models.Model):
     qty = models.IntegerField(default=1)
@@ -84,8 +88,9 @@ class InvoiceLine(models.Model):
     fini = models.IntegerField()
     dvlp = models.IntegerField()
     height = models.IntegerField()
-    description = models.CharField(max_length=200)
-    invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')   
+    description = models.CharField(max_length=200,null=True,blank=True)
+    invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')  
+    be_line = models.ForeignKey(BE_line,on_delete=models.CASCADE) 
     
 class Banknote(models.Model):
     date = models.DateField(default=timezone.now)

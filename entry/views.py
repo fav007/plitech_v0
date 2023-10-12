@@ -129,8 +129,32 @@ class InvoiceAddLineView(CreateView):
     form_class = InvoiceLineForm
     template_name = 'entry/invoice_add_lines.html'
     success_url = reverse_lazy('invoice-list')
+
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        invoice = get_object_or_404(Invoice, pk=pk)
+
+        be = invoice.be
+        be_line = BE_line.objects.filter(be=be)
+        context = super().get_context_data(**kwargs)
+        context['form'] = InvoiceLineForm(initial={'invoice':invoice})
+        context['items'] = invoice.invoice_lines.all()  # Replace this with your actual query
+        context['invoice'] = invoice
+        return context
     
     
+    def form_valid(self, form):
+
+        self.object = form.save()
+        pk = self.object.invoice.pk
+        self.success_url = reverse_lazy('invoice-add_lines', kwargs={'pk': pk})
+        return super().form_valid(form)
+    
+class InvoiceDetailView(DetailView):
+    model = Invoice
+    template_name = 'entry/invoice_details.html'
+    context_object_name = 'invoice'
+
 def banknote_form(request):
     context = {}
     return render(request, 'banknote_form.html',context)

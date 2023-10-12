@@ -6,9 +6,9 @@
     {% for invoice in invoices %}
         
         <p> 
-        Inv-num:{{invoice.number}} date:{{invoice.date}} BE_Num: {{invoice.be.pk}}
+        <a href="{% url 'invoice-detail' invoice.pk %}">Inv-num:{{invoice.number}}</a> Dated:{{invoice.date}} BE_Num: {{invoice.be.pk}}
             {{invoice.be.customers.name}}
-            MS Cost {{invoice.total}}
+            MS Cost {{invoice.total}} MGA
         </p>
 
     {% endfor %}

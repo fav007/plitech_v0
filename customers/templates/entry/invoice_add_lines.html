@@ -1,27 +1,18 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-<h1>Add a New Items</h1>
 
-{% if items %}
-  <h2>List of Items:</h2>
-  <ul>
-    {% for item in items %}
-      <li>{{ item.qty }} {{item.type}} {{item.length}} x {{item.width}} {{item.thickness}} 
-        [{{item.owner}}]
-      </li>
-    {% endfor %}
-  </ul>
-  <h3>Total: {{total}} </h3>
-{% endif %}
+<h1>Invoice create or add a New Lines</h1>
 
-<h1>Create or add new Line</h1>
+<hr>
+INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
+<hr>
+
+
+<h1></h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Add Line</button>
     </form>
-  
-    <a href="{% url 'be-details' be.pk %}"> OK </a>
-    <!-- <button onclick="window.location.href='{% url 'be-list' %}'">OK</button> -->
 
 {% endblock content %}
