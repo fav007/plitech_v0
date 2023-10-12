@@ -7,6 +7,19 @@
 INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
 <hr>
 
+<ul>
+    {% for item in items %}
+        <li> {{ item.qty }} 
+            {{ item.item }}
+            F:{{item.fini}} D:{{item.dvlp}} H:{{item.height}}
+            {{item.be_line.type}}
+            {{item.be_line.thickness}}
+            {{ item.unit_price}} MGA
+            [{{ description }}]*
+        </li> 
+    {% endfor %}
+</ul>
+<hr>
 
 <h1></h1>
     <form method="post">
@@ -14,5 +27,7 @@ INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
         {{ form.as_p }}
         <button type="submit">Add Line</button>
     </form>
+
+    <a href="{% url 'invoice-detail' invoice.pk %}"> OK </a>
 
 {% endblock content %}

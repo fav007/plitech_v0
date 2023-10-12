@@ -8,5 +8,20 @@
             <p>Discount : {{invoice.discount}} MGA</p>    
             
 
+    <hr>
+            <ul>
+                {% for item in items %}
+                    <li> {{ item.qty }} 
+                        {{ item.item }}
+                        F:{{item.fini}} D:{{item.dvlp}} H:{{item.height}}
+                        {{item.be_line.type}}
+                        {{item.be_line.thickness}}
+                        {{ item.unit_price}} MGA
+                        [{{ description }}]*
+                    </li> 
+                {% endfor %}
+            </ul>
+
+
 <a href="{% url 'invoice-add_lines' invoice.pk %}"> Add_lines </a>
 {% endblock content %}

@@ -8,7 +8,7 @@ from .forms import CustomerForm
 from django.urls import reverse_lazy
 from django.db.models import Sum, F,Q,ExpressionWrapper, DecimalField
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime,timedelta
 
 from django.views.generic import TemplateView,ListView,DetailView,UpdateView,DeleteView
 
@@ -22,16 +22,19 @@ class HomePageView(TemplateView):
 
         now = timezone.now()
 
-        # Calculate the start and end dates of the current month
         start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         end_date = now.replace(day=now.day, hour=23, minute=59, second=59, microsecond=999999)
-        print(end_date)
-        # Calculate the sum of sm_eqv for BE_line objects in the current month
         total_sm_eqv_in_current_month = BE_line.objects.filter(be__date_entry__gte=start_date, be__date_entry__lte=end_date).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
-
-        # Access the total sum
         total_sm_eqv = total_sm_eqv_in_current_month
         
+        today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        today_end = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+        today_sum = BE_line.objects.filter(be__date_entry__range=(today_start, today_end)).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
+
+        last_month_start = now - timedelta(days=now.day)
+        last_month_start = last_month_start.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        last_month_end = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) - timedelta(microseconds=1)
+        total_sm_last_month = BE_line.objects.filter(be__date_entry__range=(last_month_start, last_month_end)).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
 
         
         context['client_unique_values_count'] = Customers.objects.values('name').distinct().count()
@@ -39,7 +42,12 @@ class HomePageView(TemplateView):
         context['sm_eqv'] = BE_line.objects.aggregate(Sum('sm_eqv'))['sm_eqv__sum']
         context['amount'] = Invoice.objects.aggregate(Sum('total'))['total__sum'] + Invoice.objects.aggregate(Sum('total_sm'))['total_sm__sum']
         context['total_sm_current_month'] = total_sm_eqv
-        context['indicator'] = int(total_sm_eqv/200*100)
+        context['total_sm_current_day'] = today_sum
+        context['total_sm_last_month'] = total_sm_last_month
+        
+        TARGET = 120
+        JOUR_OUVRABLE = 26
+        context['indicator'] = int(float(total_sm_eqv)*JOUR_OUVRABLE/(TARGET*now.day)*100)
         return context
     
 class AboutPageView(TemplateView):
