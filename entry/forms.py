@@ -54,6 +54,8 @@ class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
         fields = '__all__'
+# class InvoiceLineForm(forms.Form):
+#     qty = forms.IntegerField(min_value=1)
 
         
 class BanknoteForm(forms.ModelForm):

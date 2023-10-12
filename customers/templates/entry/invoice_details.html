@@ -1,0 +1,27 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+    <h1> Invoice Details</h1>
+
+            <h4>Inv. no. {{invoice.number}} dated on {{invoice.date}} </h4>
+            <p>Total: {{invoice.total}} MGA</p>     
+            <p>Total sm : {{invoice.total_sm}} MGA</p>     
+            <p>Discount : {{invoice.discount}} MGA</p>    
+            
+
+    <hr>
+            <ul>
+                {% for item in items %}
+                    <li> {{ item.qty }} 
+                        {{ item.item }}
+                        F:{{item.fini}} D:{{item.dvlp}} H:{{item.height}}
+                        {{item.be_line.type}}
+                        {{item.be_line.thickness}}
+                        {{ item.unit_price}} MGA
+                        [{{ description }}]*
+                    </li> 
+                {% endfor %}
+            </ul>
+
+
+<a href="{% url 'invoice-add_lines' invoice.pk %}"> Add_lines </a>
+{% endblock content %}
