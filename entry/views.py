@@ -140,7 +140,7 @@ class BanknoteCreateView(CreateView):
     form_class = BanknoteForm
     template_name = 'entry/banknote_form.html'
     success_url = reverse_lazy('home')
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+    def get_context_data(self, **kwargs) :
         context = super().get_context_data(**kwargs)
         last_banknote = Banknote.objects.order_by('-id').first()
         context['last_banknote'] = last_banknote
