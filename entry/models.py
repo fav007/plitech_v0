@@ -75,7 +75,7 @@ class Invoice(models.Model):
     total = models.IntegerField('Total machine fees',default=0)
     total_sm = models.IntegerField('Total metal price',default=0)
     discount = models.IntegerField('discount',default=0)
-    metal_scrap = models.DecimalField("Metal SCRAP",max_digits=5,decimal_places=5,default=0)
+    metal_scrap = models.DecimalField("Metal SCRAP",max_digits=10,decimal_places=5,default=0)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
 
 
