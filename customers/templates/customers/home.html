@@ -2,18 +2,18 @@
 {% block content %}
 <h1>Homepage</h1> 
 
-{% now 'D d M Y' %}
+{% now 'D d M Y H:i:s' %}
 
 <div>
     <h3>Revenues</h3>
         <h4>Cumul : {{ amount_ }} MGA</h4>
-        <h4>This month : </h4>
-        <h4>Last month : </h4>
+        <h4>This month : MGA</h4>
+        <h4>Last month : MGA</h4>
 </div>
 <hr>
 <div>
     <h3>S.M. statistics</h3>
-        <h4>Cumul : {{ sm_eqv |floatformat:1 }} sm or {{ sm_pcs }} pcs </h4>
+        <h4>Cumul : {{ sm_eqv |floatformat:1 }} sm / {{ sm_pcs }} pcs </h4>
         <h4>Today : {{total_sm_current_day |floatformat:1 }} </h4>
         <h4>This month : {{ total_sm_current_month |floatformat:1 }} </h4>
         <h4>Last month : {{ total_sm_last_month |floatformat:1 }} </h4>
