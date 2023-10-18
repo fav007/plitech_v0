@@ -68,11 +68,11 @@ class InvoiceLineForm(forms.ModelForm):
         model = InvoiceLine
         fields = '__all__'
 
-    invoice = forms.ModelChoiceField(
-            queryset=Invoice.objects.all(),
-            required=True,
-            widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
-        )
+    # invoice = forms.ModelChoiceField(
+    #         queryset=Invoice.objects.all(),
+    #         required=True,
+    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
+    #     )
 
         
 class BanknoteForm(forms.ModelForm):
