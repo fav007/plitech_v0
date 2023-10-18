@@ -22,6 +22,7 @@ urlpatterns = [
     path('customers/', include('customers.urls')),
     path('',views.HomePageView.as_view(),name='home'),
     path('entry/', include('entry.urls')),
+    path('expense/',include('expense.urls')),
     
 ]
 

@@ -6,7 +6,7 @@
 <hr>
 INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
 <hr>
-
+{% if items %}
 <ul>
     {% for item in items %}
         <li> {{ item.qty }} 
@@ -19,6 +19,9 @@ INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
         </li> 
     {% endfor %}
 </ul>
+{% else %}
+<p>Waiting for lines</p>
+{% endif %}
 <hr>
 
 <h1></h1>
