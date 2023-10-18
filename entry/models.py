@@ -95,14 +95,14 @@ class InvoiceLine(models.Model):
     
 class Banknote(models.Model):
     date = models.DateField(default=timezone.now)
-    b_20_000 = models.IntegerField(default=0)
-    b_10_000 = models.IntegerField(default=0)
-    b_5_000 = models.IntegerField(default=0)
-    b_2_000 = models.IntegerField(default=0)
-    b_1_000 = models.IntegerField(default=0)
-    b_500 = models.IntegerField(default=0)
-    b_200 = models.IntegerField(default=0)
-    b_100 = models.IntegerField(default=0)
+    b_20_000 = models.IntegerField("20 000 MGA",default=0)
+    b_10_000 = models.IntegerField("10 000 MGA",default=0)
+    b_5_000 = models.IntegerField("5 000 MGA",default=0)
+    b_2_000 = models.IntegerField("2 000 MGA",default=0)
+    b_1_000 = models.IntegerField("1 000 MGA",default=0)
+    b_500 = models.IntegerField("500 MGA",default=0)
+    b_200 = models.IntegerField("200 MGA" ,default=0)
+    b_100 = models.IntegerField("100 MGA",default=0)
     total = models.IntegerField(default=0)
     
     def save(self, *args, **kwargs):

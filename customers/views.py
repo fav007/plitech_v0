@@ -45,9 +45,9 @@ class HomePageView(TemplateView):
         context['total_sm_current_day'] = today_sum
         context['total_sm_last_month'] = total_sm_last_month
         
-        TARGET = 120
-        JOUR_OUVRABLE = 26
-        context['indicator'] = int(float(total_sm_eqv)*JOUR_OUVRABLE/(TARGET*now.day)*100)
+        TARGET = 150
+        JOUR_OUVRABLE = 30
+        context['indicator'] = int(float(total_sm_eqv) *JOUR_OUVRABLE/(TARGET*now.day)*100)
         return context
     
 class AboutPageView(TemplateView):
