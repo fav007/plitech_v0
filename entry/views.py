@@ -17,6 +17,7 @@ class BEListView(ListView):
     model = BE
     template_name = 'entry/be_list.html'
     context_object_name = 'bes'
+    ordering = ['-id']
     
 class BEDetailsView(DetailView):
     model = BE
@@ -94,6 +95,7 @@ class InvoiceListView(ListView):
     model = Invoice
     template_name = 'entry/invoice_list.html'
     context_object_name = 'invoices'
+    ordering = ['-id']
 
 class InvoiceAddLineView(CreateView):
     model = InvoiceLine
