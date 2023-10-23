@@ -12,7 +12,8 @@ class BE(models.Model):
     ('C', 'Completed'),
     ('O','Out')
 ]
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     date_entry = models.DateField(default=timezone.now)
     time_entry = models.TimeField(default=timezone.now)
     status = models.CharField(max_length=1,choices=STATUS_CHOICES,default='E')
@@ -51,6 +52,9 @@ class BE_line(models.Model):
         ('3 mm','3 mm'),
         ('4 mm','4 mm')
         ]
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     qty = models.IntegerField(default=1)
     type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES,default='TPN')
     length = models.IntegerField(default=2000)
@@ -70,6 +74,8 @@ class BE_line(models.Model):
 
     
 class Invoice(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     number = models.IntegerField(unique=True)
     date = models.DateField(default=timezone.now)
     total = models.IntegerField('Total machine fees',default=0)
@@ -83,6 +89,8 @@ class Invoice(models.Model):
         return f'Inv{self.number} dated {self.date} '
  
 class InvoiceLine(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     qty = models.IntegerField(default=1)
     item = models.CharField(max_length=20)
     unit_price = models.IntegerField()
@@ -94,6 +102,8 @@ class InvoiceLine(models.Model):
     be_line = models.ForeignKey(BE_line,on_delete=models.CASCADE) 
     
 class Banknote(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     date = models.DateField(default=timezone.now)
     b_20_000 = models.IntegerField("20 000 MGA",default=0)
     b_10_000 = models.IntegerField("10 000 MGA",default=0)
