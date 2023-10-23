@@ -28,7 +28,8 @@ class Expense(models.Model):
         ('VS',"Variation des stocks"),
         ('PCI',"Pertes sur créances irrécouvrables"),
         ]
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     date = models.DateField(default=timezone.now)
     category = models.CharField(max_length=5,choices=CATEGORY_CHOICES)
     acn = models.CharField('Accounting Document Number',max_length=50)

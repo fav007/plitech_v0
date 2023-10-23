@@ -6,6 +6,8 @@ class Customers(models.Model):
         ('M.', 'Monsieur'),
         ('Mme', 'Madame'),
     ]
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=3,choices=TITLE_CHOICES)
     name = models.CharField(max_length=200,unique=True)
     company = models.CharField(max_length=200)

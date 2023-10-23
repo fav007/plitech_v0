@@ -21,6 +21,9 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         now = timezone.now()
+        
+        current_month = datetime.now().month
+        current_year = datetime.now().year
 
         start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         end_date = now.replace(day=now.day, hour=23, minute=59, second=59, microsecond=999999)
@@ -36,6 +39,7 @@ class HomePageView(TemplateView):
         last_month_end = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) - timedelta(microseconds=1)
         total_sm_last_month = BE_line.objects.filter(be__date_entry__range=(last_month_start, last_month_end)).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
 
+        distinct_client_count = Customers.objects.filter(bes__date_entry__month=current_month, bes__date_entry__year=current_year).distinct().count()
         
         context['client_unique_values_count'] = Customers.objects.values('name').distinct().count()
         context['sm_pcs'] = BE_line.objects.aggregate(Sum('qty'))['qty__sum']
