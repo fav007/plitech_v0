@@ -147,3 +147,4 @@ class BanknoteCreateView(CreateView):
         last_banknote = Banknote.objects.order_by('-id').first()
         context['last_banknote'] = last_banknote
         return context
+    

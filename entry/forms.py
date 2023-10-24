@@ -67,6 +67,9 @@ class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
         fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(),  # Adjust rows as needed
+        }
 
     # invoice = forms.ModelChoiceField(
     #         queryset=Invoice.objects.all(),

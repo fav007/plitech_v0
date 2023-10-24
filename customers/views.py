@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from customers.models import Customers
 from entry.models import Invoice
@@ -13,6 +13,7 @@ from datetime import datetime,timedelta
 from django.views.generic import TemplateView,ListView,DetailView,UpdateView,DeleteView
 
 class HomePageView(TemplateView):
+    
     template_name = "customers/home.html"
     
     
@@ -39,7 +40,7 @@ class HomePageView(TemplateView):
         last_month_end = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) - timedelta(microseconds=1)
         total_sm_last_month = BE_line.objects.filter(be__date_entry__range=(last_month_start, last_month_end)).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
 
-        distinct_client_count = Customers.objects.filter(bes__date_entry__month=current_month, bes__date_entry__year=current_year).distinct().count()
+        distinct_client_count = Customers.objects.filter(bes__date_entry__month=current_month, bes__date_entry__year=current_year).values('name').distinct().count()
         
         context['client_unique_values_count'] = Customers.objects.values('name').distinct().count()
         context['sm_pcs'] = BE_line.objects.aggregate(Sum('qty'))['qty__sum']
@@ -48,6 +49,7 @@ class HomePageView(TemplateView):
         context['total_sm_current_month'] = total_sm_eqv
         context['total_sm_current_day'] = today_sum
         context['total_sm_last_month'] = total_sm_last_month
+        context['client_unique_this_month'] = distinct_client_count
         
         TARGET = 150
         JOUR_OUVRABLE = 30
@@ -56,6 +58,9 @@ class HomePageView(TemplateView):
     
 class AboutPageView(TemplateView):
     template_name = 'customers/about.html'
+    
+class PricingPageView(TemplateView):
+    template_name = 'customers/pricing.html'
     
 
 class CustomerCreateView(CreateView):
@@ -73,6 +78,17 @@ class CustomersDetailView(DetailView):
     model = Customers
     template_name = 'customers/customer_detail.html'
     context_object_name = 'customer'
+    
+    def get_context_data(self, **kwargs):
+        pk = self.kwargs.get('pk')
+        customer = get_object_or_404(Customers, pk=pk)
+        context = super().get_context_data(**kwargs)
+        if customer.bes.order_by('-date_entry').first() is not None:
+            context['last'] = (timezone.now().date() - customer.bes.order_by('-date_entry').first().date_entry).days
+        else :
+            context['last'] = '-9999'
+        return context
+
     
 class CustomersUpdateView(UpdateView):
     model = Customers

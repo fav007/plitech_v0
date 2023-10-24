@@ -14,8 +14,8 @@ class BE(models.Model):
 ]
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    date_entry = models.DateField(default=timezone.now)
-    time_entry = models.TimeField(default=timezone.now)
+    date_entry = models.DateField("Entry Date",default=timezone.now)
+    time_entry = models.TimeField("Entry Time",default=timezone.now)
     status = models.CharField(max_length=1,choices=STATUS_CHOICES,default='E')
     customers = models.ForeignKey(Customers,on_delete=models.CASCADE,related_name='bes')
     
@@ -83,6 +83,14 @@ class Invoice(models.Model):
     discount = models.IntegerField('discount',default=0)
     metal_scrap = models.DecimalField("Metal SCRAP",max_digits=10,decimal_places=5,default=0)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
+    
+    def save(self, *args, **kwargs):
+        # Update the BE status to 'I' when an invoice is created
+        self.be.status = 'B'
+        self.be.save()
+
+        super(Invoice, self).save(*args, **kwargs)
+
 
 
     def __str__(self):
@@ -127,3 +135,4 @@ class Banknote(models.Model):
             self.b_100 * 100
         )
         super(Banknote, self).save(*args, **kwargs)
+        
