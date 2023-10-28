@@ -13,7 +13,7 @@ class Customers(models.Model):
     company = models.CharField(max_length=200)
     contact = models.CharField(max_length=10)
     location = models.CharField(max_length=100)
-    
+        
     def __str__(self) -> str:
         return f"{self.name} by {self.location}"
     

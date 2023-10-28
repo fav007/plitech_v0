@@ -64,7 +64,6 @@ class AddLinesBEView(CreateView):
         return super().form_valid(form)
     
     
-    
 def add_lines_be_view(request,pk):
     be = BE.objects.get(pk=pk)
     context={'be':be}
@@ -112,8 +111,7 @@ class InvoiceAddLineView(CreateView):
         context['items'] = invoice.invoice_lines.all()  # Replace this with your actual query
         context['invoice'] = invoice
         return context
-    
-    
+      
     def form_valid(self, form):
 
         self.object = form.save()
