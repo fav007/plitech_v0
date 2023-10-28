@@ -91,10 +91,9 @@ class Invoice(models.Model):
 
         super(Invoice, self).save(*args, **kwargs)
 
-
-
     def __str__(self):
-        return f'Inv{self.number} dated {self.date} '
+        return f'Inv{self.number} dated {self.date}'
+
  
 class InvoiceLine(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -108,6 +107,7 @@ class InvoiceLine(models.Model):
     description = models.CharField(max_length=200,null=True,blank=True)
     invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')  
     be_line = models.ForeignKey(BE_line,on_delete=models.CASCADE) 
+    
     
 class Banknote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
