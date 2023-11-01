@@ -56,12 +56,19 @@ class AddLinesBEView(CreateView):
         context['be'] = be
         return context
     
-    
     def form_valid(self, form):
-        self.object = form.save()
-        pk = self.object.be.pk
-        self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': pk})
+        be_id = self.kwargs.get('pk')
+        be = BE.objects.get(id=be_id)
+        form.instance.be = be
+        self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': be_id})
         return super().form_valid(form)
+    
+    
+    # def form_valid(self, form):
+    #     self.object = form.save()
+    #     pk = self.object.be.pk
+    #     self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': pk})
+    #     return super().form_valid(form)
     
     
 def add_lines_be_view(request,pk):

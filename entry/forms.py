@@ -31,7 +31,7 @@ class BEForm(forms.ModelForm):
 class LineBEForm(forms.ModelForm):
     class Meta:
         model = BE_line
-        exclude = ['sm_eqv']
+        exclude = ['sm_eqv','be']
         
     type = forms.ChoiceField(
         choices=BE_line.METAL_TYPE_CHOICES,

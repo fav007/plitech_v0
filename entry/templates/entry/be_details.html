@@ -1,13 +1,16 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-    <h1> Ticket entry Details</h1>
+    <h1> Ticket Entry Details</h1>
+    <hr>
+    <h3> ID : TK-{{be.pk|stringformat:'05d'}}</h3>
+    <h4>{{ be.customers.name | upper}}</h4>
+        
+        <p>Date :    {{ be.date_entry | upper}}</p>
+        <p>Time :    {{ be.time_entry }}</p>
+        <p>Qty  : {{ total_qty }}</p>
 
-    <h2>{{ be.customers.name | upper}}</h2>
-        <h3>Identifiant: BL-{{be.pk|stringformat:'05d'}}</h3>
-        <p>Date : {{ be.date_entry | upper}}</p>
-        <p>Time : {{ be.time_entry }}</p>
-
-        <h2>Ticket entry Lines</h2>
+    <hr>
+    <h2>Ticket Entry Lines</h2>
         
     <ul>
         {% for line in be.be_lines.all %}
@@ -23,10 +26,10 @@
         {% endfor %}
 
 
-        <li><strong>{{ pcs }} pcs Equiv. to: {{ total_qty }} </strong></li>
+    <strong>{{ pcs }} pcs Equiv. to: {{ total_qty }} </strong>
     </ul>
 
-
+    <hr>
      <!-- <a href="{% url 'be-update' be.pk %}"> Update </a> | -->
     <a href="{% url 'be-add_lines' be.pk %}"> Add Lines </a> |
     <a href="{% url 'invoice-create' be.pk %}"> Add Invoice </a> 
