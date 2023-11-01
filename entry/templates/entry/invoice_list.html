@@ -9,8 +9,7 @@
         <a href="{% url 'invoice-detail' invoice.pk %}">Inv-num:{{ invoice.number }}</a> Dated:{{ invoice.date }} BE_Num: {{ invoice.be.pk }}
             {{ invoice.be.customers.name }}
             MS Cost {{ invoice.total }} MGA
-            Discount: {{ invoice.discount }}
-            Metal scrap : {{ invoice.metal_scrap }}
+           
         </p>
 
     {% endfor %}

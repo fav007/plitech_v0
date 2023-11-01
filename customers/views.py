@@ -29,7 +29,7 @@ class HomePageView(TemplateView):
         start_date = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         end_date = now.replace(day=now.day, hour=23, minute=59, second=59, microsecond=999999)
         total_sm_eqv_in_current_month = BE_line.objects.filter(be__date_entry__gte=start_date, be__date_entry__lte=end_date).aggregate(Sum('sm_eqv'))['sm_eqv__sum']
-        total_sm_eqv = total_sm_eqv_in_current_month
+        total_sm_eqv = total_sm_eqv_in_current_month or 0
         
         today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
         today_end = now.replace(hour=23, minute=59, second=59, microsecond=999999)

@@ -1,0 +1,7 @@
+-- database: c:\Users\USER\code\fav007\project\plitech\plitech_v0\db.sqlite3
+
+-- Use the ▷ button in the top right corner to run the entire file.
+
+SELECT date_entry,sm_eqv FROM "entry_be_line" LEFT JOIN entry_be on entry_be_line.be_id = entry_be.id
+;
+

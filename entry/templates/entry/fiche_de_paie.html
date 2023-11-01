@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fiche de Paie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center; /* Centrer le contenu */
+        }
+        #container {
+            width: 80%; /* Largeur de 80% de la fenêtre */
+            margin: 0 auto; /* Centrer le conteneur horizontalement */
+            text-align: left; /* Aligner le texte à gauche dans le conteneur */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #print-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        @media print {
+            body {
+                text-align: left;
+            }
+            #container {
+                width: 100%;
+                margin: 0;
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>FICHE DE PAIE</h1>
+        <p><strong>Période de Paie :</strong> [Mois et Année]</p>
+        <p><strong>Nom de l'Employé :</strong> [Nom de l'Employé]</p>
+        <p><strong>Adresse de l'Employé :</strong> [Adresse de l'Employé]</p>
+        <p><strong>Numéro d'Employé :</strong> [Numéro d'Employé]</p>
+        <p><strong>Poste :</strong> [Poste de l'Employé]</p>
+
+        <table>
+            <tr>
+                <th>Éléments de la Rémunération</th>
+                <th>Montant en Ariary</th>
+                <th>Détails</th>
+            </tr>
+            <tr>
+                <td>Salaire de Base</td>
+                <td>[Salaire de Base]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Heures Supplémentaires</td>
+                <td>[Heures Supplémentaires]</td>
+                <td>Nombre d'heures x Taux horaire</td>
+            </tr>
+            <tr>
+                <td>Avantages en Nature</td>
+                <td>[Avantages en Nature]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Prime/Prime de Performance</td>
+                <td>[Prime/Prime de Performance]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Autres Avantages</td>
+                <td>[Autres Avantages]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Congés Payés</td>
+                <td>[Congés Payés]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Retenues de Sécurité Sociale</td>
+                <td>[Retenues de Sécurité Sociale]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Autres Déductions</td>
+                <td>[Autres Déductions]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><strong>Total Brut</strong></td>
+                <td><strong>[Total Brut]</strong></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Impôt sur le Revenu</td>
+                <td>[Impôt sur le Revenu]</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Cotisations Sociales</td>
+                <td>[Cotisations Sociales]</td>
+                <td>Cotisations employé et employeur</td>
+            </tr>
+            <tr>
+                <td><strong>Total Net à Payer</strong></td>
+                <td><strong>[Total Net à Payer]</strong></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <h4>Détails des Heures Supplémentaires :</h4>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Nombre d'Heures</th>
+                <th>Taux Horaire</th>
+                <th>Montant en Euros</th>
+            </tr>
+            <!-- Ajoutez des lignes pour les heures supplémentaires si nécessaire -->
+        </table>
+
+        <h4>Commentaires :</h4>
+        <p>[Zone pour les commentaires ou les notes spécifiques]</p>
+
+        <p><strong>Signature de l'Employé :</strong> _________________________ <strong>Signature de l'Employeur :</strong> _________________________</p>
+        <p>[Date]</p>
+        <button id="print-button" onclick="window.print()">Imprimer</button>
+    </div>
+</body>
+</html>

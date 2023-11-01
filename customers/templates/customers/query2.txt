@@ -1,0 +1,12 @@
+-- database: c:\Users\USER\code\fav007\project\plitech\plitech_v0\db.sqlite3
+
+-- Use the ▷ button in the top right corner to run the entire file.
+
+SELECT count(number) FROM "entry_invoiceline" RIGHT JOIN entry_invoice
+on entry_invoiceline.invoice_id = entry_invoice.id
+where entry_invoiceline.be_line_id is NULL;
+
+SELECT distinct(number) FROM "entry_invoiceline" RIGHT JOIN entry_invoice
+on entry_invoiceline.invoice_id = entry_invoice.id
+where entry_invoiceline.be_line_id is NULL ORDER BY number;
+
