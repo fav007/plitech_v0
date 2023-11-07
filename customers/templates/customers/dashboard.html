@@ -1,0 +1,25 @@
+{% extends 'customers/base.html' %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Heure</th>
+        <th>SM</th>
+    </tr>
+    <tr>
+        {% for be_with_total_amount in be_with_total_amounts %}
+
+        <td> TK-{{be_with_total_amount.id}} </td>
+        <td> {{ be_with_total_amount.date_entry }} </td>
+        <td> {{ be_with_total_amount.time_entry }}</td>
+        <td> {{be_with_total_amount.total_amount|default:0|floatformat:1}} </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock content %}

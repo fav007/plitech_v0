@@ -38,3 +38,16 @@ class Expense(models.Model):
     
     def __str__(self) -> str:
         return f'{self.category} dated {self.date} amount:{self.total} MGA'
+    
+
+class Jirama(models.Model):
+    
+    date = models.DateField(default=timezone.now,unique=True)
+    index = models.IntegerField()
+    
+    
+    def __str__(self):
+        return f'{self.date} : index is {self.index}'
+    
+    
+    

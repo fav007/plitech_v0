@@ -64,12 +64,6 @@ class AddLinesBEView(CreateView):
         return super().form_valid(form)
     
     
-    # def form_valid(self, form):
-    #     self.object = form.save()
-    #     pk = self.object.be.pk
-    #     self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': pk})
-    #     return super().form_valid(form)
-    
     
 def add_lines_be_view(request,pk):
     be = BE.objects.get(pk=pk)
@@ -94,7 +88,7 @@ class InvoiceCreateView(CreateView):
         # Get the ModelA instance based on the ID from the URL
         be = get_object_or_404(BE, pk=self.kwargs['pk'])
         # Associate the ModelA instance with ModelB and save
-        form.object = form.save()
+        form.instance.be = be
         return super().form_valid(form)
     
 class InvoiceListView(ListView):
@@ -152,4 +146,6 @@ class BanknoteCreateView(CreateView):
         last_banknote = Banknote.objects.order_by('-id').first()
         context['last_banknote'] = last_banknote
         return context
+    
+
     
