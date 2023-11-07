@@ -47,7 +47,7 @@ class HomePageView(TemplateView):
         context['sm_eqv'] = BE_line.objects.aggregate(Sum('sm_eqv'))['sm_eqv__sum']
         context['amount'] = Invoice.objects.aggregate(Sum('total'))['total__sum'] + Invoice.objects.aggregate(Sum('total_sm'))['total_sm__sum']
         context['total_sm_current_month'] = total_sm_eqv
-        context['total_sm_current_day'] = today_sum
+        context['total_sm_current_day'] = today_sum or 0
         context['total_sm_last_month'] = total_sm_last_month
         context['client_unique_this_month'] = distinct_client_count
         
