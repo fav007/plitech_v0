@@ -11,6 +11,8 @@
 
     <hr>
     <h2>Ticket Entry Lines</h2>
+
+    {% if be.be_lines.all %}
         
     <ul>
         {% for line in be.be_lines.all %}
@@ -23,11 +25,19 @@
                  *
                  {% endif %}
             </li>
+
         {% endfor %}
-
-
-    <strong>{{ pcs }} pcs Equiv. to: {{ total_qty }} </strong>
+        <strong>{{ pcs }} pcs Equiv. to: {{ total_qty }} </strong>
     </ul>
+
+    {% else %}
+
+    Not yet TK entered
+
+    {% endif %}
+
+
+    
 
     <hr>
      <!-- <a href="{% url 'be-update' be.pk %}"> Update </a> | -->

@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
-from customers.models import Customers
+from customers.models import Customers,Customers_t
 from entry.models import Invoice
 from entry.models import BE_line,BE
 from django.views.generic.edit import CreateView
@@ -47,7 +47,7 @@ class HomePageView(TemplateView):
         context['sm_eqv'] = BE_line.objects.aggregate(Sum('sm_eqv'))['sm_eqv__sum']
         context['amount'] = Invoice.objects.aggregate(Sum('total'))['total__sum'] + Invoice.objects.aggregate(Sum('total_sm'))['total_sm__sum']
         context['total_sm_current_month'] = total_sm_eqv
-        context['total_sm_current_day'] = today_sum
+        context['total_sm_current_day'] = today_sum or 0
         context['total_sm_last_month'] = total_sm_last_month
         context['client_unique_this_month'] = distinct_client_count
         
@@ -58,6 +58,18 @@ class HomePageView(TemplateView):
     
 class AboutPageView(TemplateView):
     template_name = 'customers/about.html'
+    
+class DashBoardPageView(TemplateView):
+    template_name = 'customers/dashboard.html'
+    
+    def get_context_data(self, **kwargs):
+        
+        context = super().get_context_data(**kwargs)
+        be_with_total_amounts = BE.objects.annotate(total_amount=Sum('be_lines__sm_eqv'))
+        be_with_total_amounts
+        context['be_with_total_amounts'] = be_with_total_amounts.order_by('-id')
+        
+        return context
     
 class PricingPageView(TemplateView):
     template_name = 'customers/pricing.html'
@@ -87,8 +99,22 @@ class CustomersDetailView(DetailView):
             context['last'] = (timezone.now().date() - customer.bes.order_by('-date_entry').first().date_entry).days
         else :
             context['last'] = '-9999'
+            
+        frequency = customer.bes.count()
+        
+        if frequency is not None:
+            context["frequency"] = frequency
+        else:
+            context["frequency"] = 0
+            
+            
+        total_sm_eqv = BE_line.objects.filter(be__customers=customer).aggregate(total=Sum('sm_eqv'))['total']
+        if total_sm_eqv is not None:
+            context["total_sm_eqv"] = total_sm_eqv
+        else:
+            context["total_sm_eqv"] = 0
+            
         return context
-
     
 class CustomersUpdateView(UpdateView):
     model = Customers
@@ -102,3 +128,9 @@ class CustomersDeleteView(DeleteView):
     template_name = 'customers/customer_confirm_delete.html'
     context_object_name = 'customer'
     success_url = reverse_lazy('customer-list')
+    
+class TargetClientListView(ListView):
+    model = Customers_t
+    template_name = 'customers/list_t.html'
+    context_object_name = 'customers_ts'
+    ordering = ['-id']

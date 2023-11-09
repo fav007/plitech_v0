@@ -1,0 +1,18 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Customers List</h1>
+
+<ul>
+    {% for customer in customers %}
+        <li>
+            <a href="{% url 'customer-detail' customer.id %}">CL N°{{customer.pk|stringformat:"05d"}}</a>
+            {{ customer.name | upper}} by {{ customer.location }}
+             <a href="{% url 'customer-update' customer.id %}">Update</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'home' %}">Return</a>
+
+{% endblock content %}
+

@@ -49,7 +49,8 @@ LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        fields = '__all__'
+        exclude = ['be']
+        # fields = '__all__'
         
     date = forms.DateField(
         label='Date',
