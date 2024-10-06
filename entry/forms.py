@@ -33,11 +33,11 @@ class LineBEForm(forms.ModelForm):
         choices=BE_line.METAL_TYPE_CHOICES,
         initial='TPN')
     
-    be = forms.ModelChoiceField(
-            queryset=BE.objects.all(),
-            required=True,
-            widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
-        )
+    # be = forms.ModelChoiceField(
+    #         queryset=BE.objects.all(),
+    #         required=True,
+    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
+    #     )
     
         
 LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can_delete=True)
@@ -62,11 +62,11 @@ class InvoiceLineForm(forms.ModelForm):
         model = InvoiceLine
         fields = '__all__'
 
-    invoice = forms.ModelChoiceField(
-            queryset=Invoice.objects.all(),
-            required=True,
-            widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
-        )
+    # invoice = forms.ModelChoiceField(
+    #         queryset=Invoice.objects.all(),
+    #         required=True,
+    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
+    #     )
 
         
 class BanknoteForm(forms.ModelForm):

@@ -3,10 +3,10 @@
 
     <h2>{{ customer.name | upper}}</h2>
         <h3>Identifiant: CL-{{customer.pk}}</h3>
-        <p>Name : {{ customer.name | upper}}</p>
-        <p>Location : {{ customer.location }}</p>
-        <p>Contact : {{ customer.contact }}</p>
-        <p>Company : {{ customer.company }}</p>
+        <p><strong>Name:</strong> {{ customer.name | upper}}</p>
+        <p><strong>Location:</strong> {{ customer.location }}</p>
+        <p><strong>Contact:</strong> {{ customer.contact }}</p>
+        <p><strong>Company:</strong> {{ customer.company }}</p>
 
     <!-- <a href="{% url 'customer-update' customer.pk %}">Update</a>  -->
     <br>
