@@ -17,6 +17,7 @@ class BEListView(ListView):
     model = BE
     template_name = 'entry/be_list.html'
     context_object_name = 'bes'
+    ordering = ['-id']
     
 class BEDetailsView(DetailView):
     model = BE
@@ -55,11 +56,11 @@ class AddLinesBEView(CreateView):
         context['be'] = be
         return context
     
-    
     def form_valid(self, form):
-        self.object = form.save()
-        pk = self.object.be.pk
-        self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': pk})
+        be_id = self.kwargs.get('pk')
+        be = BE.objects.get(id=be_id)
+        form.instance.be = be
+        self.success_url = reverse_lazy('be-add_lines', kwargs={'pk': be_id})
         return super().form_valid(form)
     
     
@@ -87,13 +88,14 @@ class InvoiceCreateView(CreateView):
         # Get the ModelA instance based on the ID from the URL
         be = get_object_or_404(BE, pk=self.kwargs['pk'])
         # Associate the ModelA instance with ModelB and save
-        form.object = form.save()
+        form.instance.be = be
         return super().form_valid(form)
     
 class InvoiceListView(ListView):
     model = Invoice
     template_name = 'entry/invoice_list.html'
     context_object_name = 'invoices'
+    ordering = ['-id']
 
 class InvoiceAddLineView(CreateView):
     model = InvoiceLine
@@ -110,8 +112,7 @@ class InvoiceAddLineView(CreateView):
         context['items'] = invoice.invoice_lines.all()  # Replace this with your actual query
         context['invoice'] = invoice
         return context
-    
-    
+      
     def form_valid(self, form):
 
         self.object = form.save()
@@ -145,3 +146,6 @@ class BanknoteCreateView(CreateView):
         last_banknote = Banknote.objects.order_by('-id').first()
         context['last_banknote'] = last_banknote
         return context
+    
+
+    

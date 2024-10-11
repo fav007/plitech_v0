@@ -12,9 +12,10 @@ class BE(models.Model):
     ('C', 'Completed'),
     ('O','Out')
 ]
-    
-    date_entry = models.DateField(default=timezone.now)
-    time_entry = models.TimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    date_entry = models.DateField("Entry Date",default=timezone.now)
+    time_entry = models.TimeField("Entry Time",default=timezone.now)
     status = models.CharField(max_length=1,choices=STATUS_CHOICES,default='E')
     customers = models.ForeignKey(Customers,on_delete=models.CASCADE,related_name='bes')
     
@@ -36,7 +37,8 @@ class BE_line(models.Model):
         ('Plitech','Plitech')
     ]
     
-    THICKNESS_CHOICES = [('30/100', '30/100'),
+    THICKNESS_CHOICES = [
+        ('30/100', '30/100'),
         ('40/100', '40/100'),
         ('50/100', '50/100'),
         ('60/100', '60/100'),
@@ -51,6 +53,9 @@ class BE_line(models.Model):
         ('3 mm','3 mm'),
         ('4 mm','4 mm')
         ]
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     qty = models.IntegerField(default=1)
     type = models.CharField(max_length=3,choices=METAL_TYPE_CHOICES,default='TPN')
     length = models.IntegerField(default=2000)
@@ -70,6 +75,9 @@ class BE_line(models.Model):
 
     
 class Invoice(models.Model):
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     number = models.IntegerField(unique=True)
     date = models.DateField(default=timezone.now)
     total = models.IntegerField('Total machine fees',default=0)
@@ -77,12 +85,21 @@ class Invoice(models.Model):
     discount = models.IntegerField('discount',default=0)
     metal_scrap = models.DecimalField("Metal SCRAP",max_digits=10,decimal_places=5,default=0)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
+    
+    def save(self, *args, **kwargs):
+        # Update the BE status to 'I' when an invoice is created
+        self.be.status = 'B'
+        self.be.save()
 
+        super(Invoice, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'Inv{self.number} dated {self.date} '
+        return f'Inv{self.number} dated {self.date}'
+
  
 class InvoiceLine(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     qty = models.IntegerField(default=1)
     item = models.CharField(max_length=20)
     unit_price = models.IntegerField()
@@ -93,16 +110,19 @@ class InvoiceLine(models.Model):
     invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')  
     be_line = models.ForeignKey(BE_line,on_delete=models.CASCADE) 
     
+    
 class Banknote(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     date = models.DateField(default=timezone.now)
-    b_20_000 = models.IntegerField(default=0)
-    b_10_000 = models.IntegerField(default=0)
-    b_5_000 = models.IntegerField(default=0)
-    b_2_000 = models.IntegerField(default=0)
-    b_1_000 = models.IntegerField(default=0)
-    b_500 = models.IntegerField(default=0)
-    b_200 = models.IntegerField(default=0)
-    b_100 = models.IntegerField(default=0)
+    b_20_000 = models.IntegerField("20 000 MGA",default=0)
+    b_10_000 = models.IntegerField("10 000 MGA",default=0)
+    b_5_000 = models.IntegerField("5 000 MGA",default=0)
+    b_2_000 = models.IntegerField("2 000 MGA",default=0)
+    b_1_000 = models.IntegerField("1 000 MGA",default=0)
+    b_500 = models.IntegerField("500 MGA",default=0)
+    b_200 = models.IntegerField("200 MGA" ,default=0)
+    b_100 = models.IntegerField("100 MGA",default=0)
     total = models.IntegerField(default=0)
     
     def save(self, *args, **kwargs):
@@ -117,3 +137,4 @@ class Banknote(models.Model):
             self.b_100 * 100
         )
         super(Banknote, self).save(*args, **kwargs)
+        

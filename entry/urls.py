@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (BECreateView,BEListView,BEUpdateView,AddLinesBEView,BEDetailsView,add_lines_be_view,
-                    InvoiceCreateView,InvoiceListView,BanknoteCreateView,InvoiceDetailView,InvoiceAddLineView)
+                    InvoiceCreateView,InvoiceListView,BanknoteCreateView,InvoiceDetailView,InvoiceAddLineView,
+                    )
 
 urlpatterns = [
     path('create/', BECreateView.as_view(),name='be-create'),
@@ -12,5 +13,5 @@ urlpatterns = [
     path('list_invoice/', InvoiceListView.as_view(),name='invoice-list'),
     path('list/<int:pk>/detail_invoice/', InvoiceDetailView.as_view(),name='invoice-detail'),
     path('invoice/<int:pk>/add_lines',InvoiceAddLineView.as_view(),name = 'invoice-add_lines'),
-    path('banknote/create',BanknoteCreateView.as_view(),name='banknote-create')
-]
+    path('banknote/create',BanknoteCreateView.as_view(),name='banknote-create'),    
+    ]

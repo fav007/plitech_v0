@@ -1,5 +1,5 @@
 from django import forms
-from .models import BE,BE_line,Invoice,InvoiceLine,Banknote
+from .models import BE,BE_line,Invoice,InvoiceLine,Banknote,Customers
 from django.utils import timezone
 from django.forms import inlineformset_factory
 from datetime import datetime
@@ -23,11 +23,15 @@ class BEForm(forms.ModelForm):
         initial=datetime.now().strftime('%H:%M'),
     )
     
+    customers = forms.ModelChoiceField(
+            queryset = Customers.objects.all().order_by('name'),
+    )
+    
 
 class LineBEForm(forms.ModelForm):
     class Meta:
         model = BE_line
-        exclude = ['sm_eqv']
+        exclude = ['sm_eqv','be']
         
     type = forms.ChoiceField(
         choices=BE_line.METAL_TYPE_CHOICES,
@@ -45,7 +49,8 @@ LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        fields = '__all__'
+        exclude = ['be']
+        # fields = '__all__'
         
     date = forms.DateField(
         label='Date',
@@ -54,13 +59,18 @@ class InvoiceForm(forms.ModelForm):
         initial=timezone.now)
     
     # be = forms.ModelChoiceField(
-    #                          widget=forms.Select(attrs={'disabled':'disabled'})
-    #                             )
+    #         queryset=BE.objects.all(),
+    #         required=True,
+    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
+    #     )
 
 class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
         fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(),  # Adjust rows as needed
+        }
 
     # invoice = forms.ModelChoiceField(
     #         queryset=Invoice.objects.all(),

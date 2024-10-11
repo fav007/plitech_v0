@@ -2,14 +2,23 @@
 {% block content %}
 <h1>Customers List</h1>
 
-<ul>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Update</th>
+    </tr>
     {% for customer in customers %}
-        <li>
-            <a href="{% url 'customer-detail' customer.id %}">CL N°{{customer.pk|stringformat:"05d"}}</a>
-            {{ customer.name | upper}} by {{ customer.location }}
-        </li>
+    <tr>
+        <td> <a href="{% url 'customer-detail' customer.id %}">CL N°{{customer.pk|stringformat:"05d"}} </a></td>
+        <td> {{ customer.name | upper}} </td>
+        <td> {{ customer.location }} </td>
+        <td> <a href="{% url 'customer-update' customer.id %}">Update</a> </td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
+
 
 <a href="{% url 'home' %}">Return</a>
 

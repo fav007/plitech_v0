@@ -1,0 +1,22 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Add an index</h1>
+
+
+<table>
+        <tr>
+                <th>Date</th>
+                <th>Index</th>
+        </tr>
+        {% for jirama in jiramas %}
+        <tr>
+                <td>{{ jirama.date }}</td>
+                <td>{{ jirama.index }}</td>
+        </tr>
+        {% endfor %}
+</table>
+                
+
+
+
+{% endblock content %}

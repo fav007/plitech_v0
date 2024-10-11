@@ -1,0 +1,186 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<style>
+    /* Center the table horizontally */
+    table {
+        margin: 0 auto;
+    }
+
+    /* Style the table */
+    table {
+        border-collapse: collapse;
+        width: 75%;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+    td:nth-child(n+4) {
+        color: gray; /* Met en gris les lettres à partir de la troisième colonne */
+    }
+
+    th {
+        background-color: #a7e6dd;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        text-align: center;
+    }
+</style>
+
+<h1>Our pricing</h1>
+<table>
+        <tr>
+            <th>Items</th>
+            <th> < 12/10 </th> 
+            <th> 15/10</th>
+            <th> 2mm </th>
+            <th> 3mm </th>
+            <th> 4mm </th>
+            <th> Inox</th>
+            <th> V10 </th>
+        </tr>
+        <tr>
+            <td>Découpe</td>
+            <td> 600</td>
+            <td> 700</td>
+            <td> 900</td>
+            <td>1200</td>
+            <td>1500</td>
+            <td>+ 200 </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Pliage </td>
+            <td> 600</td>
+            <td> 700</td>
+            <td> 900</td>
+            <td>1200</td>
+            <td>1500</td>
+            <td>+ 200 </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Persienne</td>
+            <td>1500</td>
+            <td>1700</td>
+            <td>2000</td>
+            <td>3000</td>
+            <td>5000</td>
+            <td>+ 200</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Forme Simple</td>
+            <td>3 000</td>
+            <td>4 000</td>
+            <td>6 000</td>
+            <td>8 000</td>
+            <td>10 000</td>
+            <td>+2 000</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Forme X</td>
+            <td>4 000</td>
+            <td>5 000</td>
+            <td>7 000</td>
+            <td>9 000</td>
+            <td>11 000</td>
+            <td>+2 000</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Forme Diamant</td>
+            <td>6 000</td>
+            <td>7 000</td>
+            <td>9 000</td>
+            <td>11 000</td>
+            <td>13 000</td>
+            <td>+2 000</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>Forme 45 2000 fini (promotion) </td>
+            <td>11 000</td>
+            <td>12 000</td>
+            <td>14 000</td>
+            <td>16 000</td>
+            <td>18 000</td>
+            <td>+4 000</td>
+            <td>+2 000</td>
+        </tr>
+
+        <tr>
+            <td>Forme 45 1000 fini (promotion) </td>
+            <td>6 000</td>
+            <td>7 000</td>
+            <td>9 000</td>
+            <td>11 000</td>
+            <td>13 000</td>
+            <td>+2 000</td>
+            <td>+2 000</td>
+        </tr>
+
+        <tr>
+            <td>Forme 45 500 fini (promotion) </td>
+            <td>3 000</td>
+            <td>4 000</td>
+            <td>6 000</td>
+            <td>8 000</td>
+            <td>10 000</td>
+            <td>+1 000</td>
+            <td>+2 000</td>
+        </tr>
+
+        
+        <tr>
+            <td>Forme V 2000 fini</td>
+            <td>15 000</td>
+            <td>18 000</td>
+            <td>21 000</td>
+            <td></td>
+            <td></td>
+            <td>+4 000</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Forme V 1000 fini</td>
+            <td>12 000</td>
+            <td>14 000</td>
+            <td>17 000</td>
+            <td></td>
+            <td></td>
+            <td>+ 3000</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Forme V  500 fini</td>
+            <td> 7 000</td>
+            <td> 8 000</td>
+            <td>11 000</td>
+            <td></td>
+            <td></td>
+            <td>+2 000</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>Forme V  250 fini</td>
+            <td>4 000</td>
+            <td>5 000</td>
+            <td>8 000</td>
+            <td></td>
+            <td></td>
+            <td>+1 000</td>
+            <td></td>
+        </tr>
+</table>
+{% endblock content %}
