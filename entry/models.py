@@ -37,7 +37,8 @@ class BE_line(models.Model):
         ('Plitech','Plitech')
     ]
     
-    THICKNESS_CHOICES = [('30/100', '30/100'),
+    THICKNESS_CHOICES = [
+        ('30/100', '30/100'),
         ('40/100', '40/100'),
         ('50/100', '50/100'),
         ('60/100', '60/100'),
@@ -74,6 +75,7 @@ class BE_line(models.Model):
 
     
 class Invoice(models.Model):
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     number = models.IntegerField(unique=True)
