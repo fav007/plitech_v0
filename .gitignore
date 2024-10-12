@@ -44,3 +44,4 @@ __pycache__/
 
 last_dump.json
 db.sqlite3
+settings.py
