@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
 from customers.models import Customers,Customers_t
@@ -12,7 +14,8 @@ from datetime import datetime,timedelta
 
 from django.views.generic import TemplateView,ListView,DetailView,UpdateView,DeleteView
 
-class HomePageView(TemplateView):
+
+class HomePageView(LoginRequiredMixin,TemplateView):
     
     template_name = "customers/home.html"
     

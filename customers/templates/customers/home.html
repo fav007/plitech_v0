@@ -1,39 +1,76 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-<h1>Homepage</h1> 
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary"><i class="fas fa-home"></i> Dashboard Overview</h1>
 
-{% now 'D d M Y H:i:s' %}
+    <!-- Welcome Message -->
+    <div class="mb-4">
+        {% if user.is_authenticated %}
+            <h3 class="text-success">Welcome, {{ user.username }}!</h3>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Please log in to access your dashboard.
+            </div>
+        {% endif %}
+    </div>
 
-<div>
-    <h3>Income Overview</h3>
-        <p>Cumulative Total: {{ amount_ }} MGA</p>
-        <p>Current Month : MGA</p>
-        <p>Previous Month : MGA</p>
+    <!-- Current Date and Time -->
+    <p class="text-muted">
+        <i class="fas fa-clock"></i> Current Date & Time: {% now 'l, d F Y H:i' %}
+    </p>
+
+    <hr>
+    {% if user.is_superuser %}
+    <!-- Income Overview Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-chart-line"></i> Income Overview</h3>
+            <p><strong>Cumulative Total:</strong> {{ amount_ }} MGA</p>
+            <p><strong>Current Month:</strong> {{ current_month_income }} MGA</p>
+            <p><strong>Previous Month:</strong> {{ previous_month_income }} MGA</p>
+        </div>
+    </div>
+    {% else %}
+    {% endif %}
+
+    <hr>
+
+    <!-- S.M. Statistics Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-balance-scale"></i> S.M. Statistics</h3>
+            <p><strong>Cumulative Total:</strong> {{ sm_eqv | floatformat:1 }} sm / {{ sm_pcs }} pcs</p>
+            <p><strong>Daily Sales:</strong> {{ total_sm_current_day | floatformat:1 }} sm</p>
+            <p><strong>Current Month:</strong> {{ total_sm_current_month | floatformat:1 }} sm</p>
+            <p><strong>Previous Month:</strong> {{ total_sm_last_month | floatformat:1 }} sm</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Client Information Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-users"></i> Client Overview</h3>
+            <p><strong>Total Clients:</strong> {{ client_unique_values_count }}</p>
+            <p><strong>Clients This Month:</strong> {{ client_unique_this_month }}</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Performance Metrics Section -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-tachometer-alt"></i> Performance Metrics</h3>
+            <p><strong>Total Pieces Sold:</strong> {{ sm_pcs }}</p>
+            <p><strong>Total SM Equivalent:</strong> {{ sm_eqv | floatformat:1 }}</p>
+
+            <!-- SM Progress Meter -->
+            <label for="sm_eqv" class="form-label">S.M. Progress</label>
+            <meter id="sm_eqv" class="w-100" min="0" max="100" low="84" high="90" optimum="95" value="{{ indicator }}"></meter>
+            <p class="mt-2"><strong>Progress:</strong> {{ indicator }}%</p>
+        </div>
+    </div>
 </div>
-<hr>
-<div>
-    <h3>S.M. statistics</h3>
-        <h4>Cumulative Total : {{ sm_eqv |floatformat:1 }} sm / {{ sm_pcs }} pcs </h4>
-        <h4>Daily Sales : {{total_sm_current_day |floatformat:1 }} </h4>
-        <h4>Current Month : {{ total_sm_current_month |floatformat:1 }} </h4>
-        <h4>Previous Month : {{ total_sm_last_month |floatformat:1 }} </h4>
-</div>
-<hr>
-<h3>Client Count: {{ client_unique_values_count }}</h3>
-<h3>This month client : {{client_unique_this_month}}</h3>
-<h3>Total Pieces: {{ sm_pcs }}</h3>
-<h3>Total SM Equivalent: {{ sm_eqv |floatformat:1}}</h3>
-<hr>
-<!-- <label>
-    SM progress: <progress value={{ indicator }} max="100">70 %</progress>
-</label> -->
-
-<h3>Performance Metrics</h3>
-
-<label for="sm_eqv"> SM progress </label>
-
-<meter id="sm_eqv" min="0" max="100" 
-low="84" high="90" optimum="95" value={{ indicator }}></meter>
-
-
-{% endblock content %}
+{% endblock %}

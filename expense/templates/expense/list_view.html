@@ -1,14 +1,20 @@
 {% extends 'customers/base.html' %}
-{% block content %}
-<h1>Add a New Expense</h1>
-<ul>
-{% for expense in expenses %}
 
-                    <li>{{ expense.date }} {{ expense.get_category_display }}
-                    {{ expense.acn }}
-                    {{ expense.description }}
-                    {{ expense.total }}</li>
+{% block content %}
+
+<h1>List of expenses</h1>
+
+<ul>
+        {% for expense in expenses %}
+
+                <li>
+                        {{ expense.date }} {{ expense.get_category_display }}
+                        {{ expense.acn }}
+                        {{ expense.description }}
+                        {{ expense.total }}
+                </li>
                 
-            {% endfor %}
+        {% endfor %}
+
 </ul>
 {% endblock content %}
