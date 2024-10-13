@@ -1,19 +1,31 @@
 {% extends 'customers/base.html' %}
 {% block content %}
 
-    <h2>{{ customer.name | upper}}</h2>
-        <h3>Identifiant: CL-{{customer.pk}}</h3>
-        <p><strong>Name:</strong> {{ customer.name | upper}}</p>
-        <p><strong>Location:</strong> {{ customer.location }}</p>
-        <p><strong>Contact:</strong> {{ customer.contact }}</p>
-        <p><strong>Company:</strong> {{ customer.company }}</p>
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h2 class="text-uppercase mb-0">{{ customer.name }}</h2>
+            <h4>Identifiant: CL-{{ customer.pk }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Name:</strong> {{ customer.name | upper }}</p>
+            <p><strong>Location:</strong> {{ customer.location }}</p>
+            <p><strong>Contact:</strong> {{ customer.contact }}</p>
+            <p><strong>Company:</strong> {{ customer.company }}</p>
 
-        <p>Last seen {{ last }} days ago</p>
-        <p>Frequency :{{frequency}}</p>
-        <p>Tot. SM eqv: {{total_sm_eqv |floatformat:1}}</p>
+            <hr>
 
-    <!-- <a href="{% url 'customer-update' customer.pk %}">Update</a>  -->
-    <br>
-    <a href="{% url 'home' %}">Return</a>
+            <p>Last seen: {{ last }} days ago</p>
+            <p>Frequency: {{ frequency }}</p>
+            <p>Total SM equivalent: {{ total_sm_eqv | floatformat:1 }}</p>
+
+            <hr>
+        <div>
+            {% comment %} <a href="{% url 'customer-update' customer.pk %}" class="btn btn-warning">Update Customer</a> {% endcomment %}
+            <a href="{% url 'home' %}" class="btn btn-secondary">Return to Home</a>
+        </div>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}
