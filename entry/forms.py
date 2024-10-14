@@ -12,19 +12,25 @@ class BEForm(forms.ModelForm):
         
     date_entry = forms.DateField(
         label='Date',
-        widget=forms.DateInput(attrs={'type': 'date'}),  # Utilisation d'un widget datepicker en HTML
-        input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],  # Formats de date acceptés
-        initial=timezone.now
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],
+        initial=timezone.now().date,  # Correcting the initial value to only include date
+        # help_text='Enter the date in YYYY-MM-DD format.'
     )
+    
     time_entry = forms.TimeField(
         label='Time of Entry',
-        widget=forms.TimeInput(attrs={'type':'time'}),
+        widget=forms.TimeInput(attrs={'type':'time', 'class': 'form-control'}),
         input_formats=['%H:%M'],
         initial=datetime.now().strftime('%H:%M'),
+        # help_text='Enter the time in HH:MM format.'
     )
     
     customers = forms.ModelChoiceField(
-            queryset = Customers.objects.all().order_by('name'),
+        queryset=Customers.objects.all().order_by('name'),
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label='Customer',
+        # help_text='Select a customer from the list.',
     )
     
 

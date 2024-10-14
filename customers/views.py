@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse
@@ -8,7 +10,7 @@ from entry.models import BE_line,BE
 from django.views.generic.edit import CreateView
 from .forms import CustomerForm
 from django.urls import reverse_lazy
-from django.db.models import Sum, F,Q,ExpressionWrapper, DecimalField
+from django.db.models import Sum,Count, F,Q,ExpressionWrapper, DecimalField
 from django.utils import timezone
 from datetime import datetime,timedelta
 
@@ -89,6 +91,10 @@ class ListCustomers(ListView):
     template_name = 'customers/list_client.html'
     context_object_name = 'customers'
     
+     # Override the get_queryset method to annotate customers with the BE count
+    def get_queryset(self):
+        return Customers.objects.annotate(be_count=Count('bes')).order_by('id')  # 'bes' is the related_name from BE model
+    
 class CustomersDetailView(DetailView):
     model = Customers
     template_name = 'customers/customer_detail.html'
@@ -102,21 +108,12 @@ class CustomersDetailView(DetailView):
             context['last'] = (timezone.now().date() - customer.bes.order_by('-date_entry').first().date_entry).days
         else :
             context['last'] = '-9999'
-            
+
         frequency = customer.bes.count()
-        
-        if frequency is not None:
-            context["frequency"] = frequency
-        else:
-            context["frequency"] = 0
-            
-            
+
+        context["frequency"] = frequency if frequency is not None else 0
         total_sm_eqv = BE_line.objects.filter(be__customers=customer).aggregate(total=Sum('sm_eqv'))['total']
-        if total_sm_eqv is not None:
-            context["total_sm_eqv"] = total_sm_eqv
-        else:
-            context["total_sm_eqv"] = 0
-            
+        context["total_sm_eqv"] = total_sm_eqv if total_sm_eqv is not None else 0
         return context
     
 class CustomersUpdateView(UpdateView):
@@ -126,6 +123,9 @@ class CustomersUpdateView(UpdateView):
     context_object_name = 'customer'
     success_url = reverse_lazy('customer-list')
     
+    def form_valid(self, form):
+        messages.success(self.request, 'Customer updated successfully.')
+        return super().form_valid(form)
 class CustomersDeleteView(DeleteView):
     model = Customers
     template_name = 'customers/customer_confirm_delete.html'

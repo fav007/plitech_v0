@@ -1,0 +1,123 @@
+{% extends "customers/base.html" %}
+
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Company Performance Dashboard</h1>
+        
+        <!-- KPIs Section -->
+        <div class="row text-center">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Customers</h5>
+                        <h3>{{ total_customers }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Ticket Entry</h5>
+                        <h3>{{ total_bes }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Invoices</h5>
+                        <h3>{{ total_invoices }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Total Revenue (MGA)</h5>
+                        <h3>{{ total_revenue }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Metal Revenue (MGA) </h5>
+                        <h3>{{ total_metal_revenue }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graph Section -->
+        <div class="row mt-5">
+            <div class="col-lg-6">
+                <canvas id="beStatusChart"></canvas>
+            </div>
+            <div class="col-lg-6">
+                <canvas id="customerLocationChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Latest BE Entries -->
+        <div class="mt-5">
+            <h3>Recent BE Entries</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in latest_be_entries %}
+                    <tr>
+                        <td>{{ entry.date_entry }}</td>
+                        <td>{{ entry.time_entry }}</td>
+                        <td>{{ entry.customers.name }}</td>
+                        <td>{{ entry.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // BE Status Chart
+        const beStatusChart = new Chart(document.getElementById('beStatusChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Entry', 'Billed', 'In Progress', 'Completed', 'Out'],
+                datasets: [{
+                    data: [
+                        {% for status in be_statuses %}{{ status.count }}, {% endfor %}
+                    ],
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'],
+                }]
+            }
+        });
+
+        // Customer Location Chart
+        const customerLocationChart = new Chart(document.getElementById('customerLocationChart'), {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for location in customer_locations %}'{{ location.location }}',{% endfor %}
+                ],
+                datasets: [{
+                    label: 'Number of Customers',
+                    data: [
+                        {% for location in customer_locations %}{{ location.count }},{% endfor %}
+                    ],
+                    backgroundColor: '#42a5f5'
+                }]
+            }
+        });
+    </script>
+
+    {% endblock content %}
+
+    
