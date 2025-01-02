@@ -137,3 +137,6 @@ class TargetClientListView(ListView):
     template_name = 'customers/list_t.html'
     context_object_name = 'customers_ts'
     ordering = ['-id']
+    
+class SearchClientView(TemplateView):
+    template_name = 'customers/search_client.html'

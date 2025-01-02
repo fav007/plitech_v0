@@ -2,8 +2,8 @@
 
 {% block content %}
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center">Company Performance Dashboard</h1>
+    <div class="container mt-5 mb-5">
+        <h1 class="text-center mb-5">Company Performance Dashboard</h1>
         
         <!-- KPIs Section -->
         <div class="row text-center">
@@ -34,8 +34,16 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
+                        <h5>Total Sheet Metal</h5>
+                        <h3>{{ total_sheet_metal|default:"0"|floatformat:1 }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
                         <h5>Total Revenue (MGA)</h5>
-                        <h3>{{ total_revenue }}</h3>
+                        <h3>{{ total_revenue_|default:"0" }}</h3>
                     </div>
                 </div>
             </div>
@@ -44,6 +52,7 @@
                     <div class="card-body">
                         <h5>Metal Revenue (MGA) </h5>
                         <h3>{{ total_metal_revenue }}</h3>
+                        
                     </div>
                 </div>
             </div>
@@ -83,7 +92,40 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <!-- First Graph -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Monthly Metal Sheet Chart</h2>
+                            <canvas id="smEqvChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Second Graph -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>Monthly Revenue Chart</h2>
+                            <canvas id="monthlyRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
     </div>
+
+    <div style="height: 500px;"></div>
+
+
+    
 
     <script>
         // BE Status Chart
@@ -116,7 +158,66 @@
                 }]
             }
         });
+
+        const ctx = document.getElementById('smEqvChart').getContext('2d');
+        const smEqvChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [{
+                    label: 'Sheet Metal Equivalent (sm_eqv)',
+                    data: {{ chart_data|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)', // Blue
+                    borderColor: 'rgba(54, 162, 235, 1)', // Darker blue for contrast
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
+
+    <script>
+        // Revenue chart-specific data passed from the backend
+        const revenueChartLabels = {{ revenue_chart_labels|safe }}; // E.g., ['Jan 2025', 'Feb 2025']
+        const revenueChartData = {{ revenue_chart_data|safe }};     // E.g., [1000, 2000, 1500]
+    
+        // Create the Monthly Revenue Chart
+        const ctxRevenue = document.getElementById('monthlyRevenueChart').getContext('2d');
+        const monthlyRevenueChart = new Chart(ctxRevenue, {
+            type: 'bar',
+            data: {
+                labels: revenueChartLabels, // Use the unique variable
+                datasets: [{
+                    label: 'Revenue (unit_price * qty)',
+                    data: revenueChartData, // Use the unique variable
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)', // Pink for contrast
+                    borderColor: 'rgba(255, 99, 132, 1)', // Darker pink for contrast
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Revenue (MGA)'
+                        }
+                    },
+                    
+                }
+            }
+        });
+    </script>
+    
 
     {% endblock content %}
 
