@@ -69,6 +69,15 @@ class InvoiceForm(forms.ModelForm):
     #         required=True,
     #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
     #     )
+    
+class InvoiceSearchForm(forms.Form):
+    invoice_number = forms.IntegerField(
+        label='Invoice Number',
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter Invoice Number...'
+        })
+    )
 
 class InvoiceLineForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,29 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Ticket Entry List</h1>
+
+<ul>
+    {% for be in bes %}
+        
+        <p> 
+            
+            <a href="{% url 'be-details' be.id %}">BE N°{{be.id|stringformat:"05d"}} </a> {{be.date_entry }} - {{be.time_entry }} - {{be.customers.name|upper}}
+            - {{be.status}} 
+            <ul>
+                {% for line in be.be_lines.all %} 
+                
+                    <li>{{line.sm_eqv|floatformat:"1"}} pcs. {{line.thickness}} </li>
+
+
+                {% endfor %}
+            </ul>
+
+            <!-- <a href="{% url 'be-add_lines' be.id %}">add lines</a> -->
+
+             
+        </p>
+
+    {% endfor %}
+</ul>
+
+{% endblock content %}

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
 from .models import BE,BE_line,Customers,Invoice,InvoiceLine,Banknote
-from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm
+from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm,InvoiceSearchForm
 from django.urls import reverse_lazy
 
 class BECreateView(CreateView):
@@ -18,6 +18,16 @@ class BEListView(ListView):
     template_name = 'entry/be_list.html'
     context_object_name = 'bes'
     ordering = ['-id']
+    
+class BEListNoInvView(ListView):
+    model = BE
+    template_name = 'entry/be_list_no_inv.html'
+    context_object_name = 'bes'
+    
+    def get_queryset(self):
+        return BE.objects.filter(invoice__isnull=True).order_by("-id")
+    
+    
     
 class BEDetailsView(DetailView):
     model = BE
@@ -96,6 +106,7 @@ class InvoiceListView(ListView):
     template_name = 'entry/invoice_list.html'
     context_object_name = 'invoices'
     ordering = ['-id']
+    
 
 class InvoiceAddLineView(CreateView):
     model = InvoiceLine
@@ -130,6 +141,32 @@ class InvoiceDetailView(DetailView):
         invoice = get_object_or_404(Invoice, pk=pk)
         context = super().get_context_data(**kwargs)
         context['items'] = invoice.invoice_lines.all()  # Replace this with your actual query
+        return context
+    
+class InvoiceDetailSearchView(DetailView):
+    
+    model = Invoice
+    template_name = 'entry/invoice_search_details.html'
+    context_object_name = 'invoice'
+    
+    def get_object(self):
+        """
+        Override get_object to search by invoice_number.
+        """
+        invoice_number = self.request.GET.get('invoice_number')
+        if invoice_number:
+            try:
+                return Invoice.objects.get(number=invoice_number)
+            except Invoice.DoesNotExist:
+                return None
+        return None
+
+    def get_context_data(self, **kwargs):
+        """
+        Add the search form and invoice details to the context.
+        """
+        context = super().get_context_data(**kwargs)
+        context['form'] = InvoiceSearchForm(self.request.GET or None)
         return context
 
 def banknote_form(request):

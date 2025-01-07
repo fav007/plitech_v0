@@ -125,6 +125,7 @@
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'overview' %}"><i class="fas fa-chart-line"></i> Overview</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-users"></i> Clients</a></li>
+                            <li><a class="dropdown-item" href="{% url 'dashboard-utilities' %}"><i class="fas fa-lightbulb"></i> Utilities </a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-ban"></i> Not Available</a></li>
                         </ul>
@@ -145,25 +146,30 @@
                     </li>
 
                     <!-- Tickets -->
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ticket-alt"></i> Tickets</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'be-create' %}"><i class="fas fa-plus"></i> New Ticket</a></li>
                             <li><a class="dropdown-item" href="{% url 'be-list' %}"><i class="fas fa-list"></i> Ticket List</a></li>
+                            <li><a class="dropdown-item" href="{% url 'be-list-no-inv' %}"><i class="fas fa-list"></i> Ticket List No Invoice</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Ticket</a></li>
                         </ul>
                     </li>
 
                     <!-- Invoices -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-file-invoice"></i> Invoices</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'invoice-list' %}"><i class="fas fa-list"></i> Invoice List</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Invoice</a></li>
-                        </ul>
-                    </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-file-invoice-dollar"></i> Manage Invoices
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'invoice-list' %}"><i class="fas fa-file-alt"></i> View All Invoices</a></li>
+                                <li><a class="dropdown-item" href="{% url 'search-invoice'%}"><i class="fas fa-search"></i> Search Invoice</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-pencil-alt"></i> Modify Invoice</a></li>
+                            </ul>
+                        </li>
 
                     <!-- Expenses -->
                     <li class="nav-item dropdown">
@@ -235,7 +241,7 @@
         {% block content %}
         {% endblock %}
     </div>
-
+    <div style="height: 100px;"></div> <!-- Adds  blank space at the bottom -->
     <!-- Optional Footer -->
     <footer class="bg-dark text-white pb-0 text-center">
         <p>&copy; 2024 Plitech App. All rights reserved.</p>

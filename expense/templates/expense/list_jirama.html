@@ -1,22 +1,43 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-<h1>Add an index</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Electricity Usage</h1>
 
-
-<table>
-        <tr>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
                 <th>Date</th>
                 <th>Index</th>
-        </tr>
-        {% for jirama in jiramas %}
-        <tr>
+                {% if user.is_superuser %}
+                <th>Consumption</th> <!-- New header for the difference column -->
+                {% endif %}
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for jirama in jiramas %}
+            <tr>
                 <td>{{ jirama.date }}</td>
                 <td>{{ jirama.index }}</td>
-        </tr>
-        {% endfor %}
-</table>
-                
-
-
-
-{% endblock content %}
+                {% if user.is_superuser %}
+                <td>
+                    {% if jirama.kw is not None %}
+                        {{ jirama.kw }} <!-- Display the difference between current and previous index -->
+                    {% else %}
+                        N/A <!-- No difference for the first line -->
+                    {% endif %}
+                </td>
+                {% endif %}
+                <td>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'jirama-edit' jirama.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                    {% else %}
+                        <span class="text-muted">No action available</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

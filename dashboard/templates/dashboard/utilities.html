@@ -1,0 +1,30 @@
+{% extends "customers/base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-end table-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Month</th>
+                    <th>MS_EQV</th>
+                    <th>EC</th>
+                    <th>Total Income</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in monthly_data %}
+                <tr>
+                    <td class="text-end">{{ entry.month }}</td>
+                    <td>{{ entry.sm_eqv|floatformat }}</td>
+                    <td>{{ entry.consumption }}</td>
+                    <td>{{ entry.total_invoice_sum }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

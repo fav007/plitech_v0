@@ -1,0 +1,124 @@
+<!-- templates/invoices/invoice_detail_search.html -->
+{% extends 'customers/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Invoice</h2>
+    
+    <!-- Search Form -->
+    <form method="get" class="mb-3">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Display Invoice Details if Found -->
+    {% if invoice %}
+    <div class="card mt-3">
+        <div class="card-header">
+            Invoice Details
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Invoice Number: {{ invoice.number }}</h5>
+            <p class="card-text"><strong>Customer Name:</strong> {{ invoice.be.customers.name }}</p>
+            <p class="card-text"><strong>Ticket Of Entry Date:</strong> {{ invoice.be.created_at |date:"D, M d, Y h:i A" }}</p>
+            <p class="card-text"><strong>Invoice Date:</strong> {{ invoice.date |date:"D, M. d, Y"}}</p>
+            <p class="card-text"><strong>Ticket of Entry Number:</strong> TK-{{ invoice.be.pk}}</p>
+            <p class="card-text"><strong>Total Metal Scrap:</strong> {{ invoice.metal_scrap | floatformat:2}}  </p>
+            <p class="card-text"><strong>Total Machine fees:</strong> {{ invoice.total }}  MGA </p>
+            <p class="card-text"><strong>Total Metal price:</strong> {{ invoice.total_sm }}  MGA </p>
+            <p class="card-text"><strong>Total Discount:</strong> {{ invoice.discount }}  MGA </p>
+        </div>
+    </div>
+
+    <!-- Display Invoice Lines -->
+    <div class="card mt-3">
+        <div class="card-header">
+            Invoice Lines
+        </div>
+        <div class="card-body">
+            {% if invoice.invoice_lines.all %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Fini</th>
+                        <th>Dvlp</th>
+                        <th>Height</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for line in invoice.invoice_lines.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ line.item }}</td>
+                        <td>{{ line.qty }}</td>
+                        <td>{{ line.unit_price }}</td>
+                        <td>{{ line.fini }}</td>
+                        <td>{{ line.dvlp }}</td>
+                        <td>{{ line.height }}</td>
+                        <td>{{ line.description|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No invoice lines found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Display Invoice Lines -->
+    <div class="card mt-3">
+        <div class="card-header">
+            Ticket Entry Lines
+        </div>
+        <div class="card-body">
+            {% if invoice.be.be_lines.all %}
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Quantity</th>
+                        <th>Type</th>
+                        <th>length</th>
+                        <th>width</th>
+                        <th>thickness</th>
+                        <th>owner</th>
+                        <th>sm_eqv</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for line in invoice.be.be_lines.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ line.qty }}</td>
+                        <td>{{ line.type }}</td>
+                        <td>{{ line.length }}</td>
+                        <td>{{ line.width }}</td>
+                        <td>{{ line.thickness }}</td>
+                        <td>{{ line.owner }}</td>
+                        <td>{{ line.sm_eqv|floatformat:"2"|default:"0" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+            <p>No ticket entry lines found.</p>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% elif request.GET.invoice_number %}
+    <div class="alert alert-danger mt-3">No invoice found for the given number.</div>
+    {% endif %}
+</div>
+{% endblock %}
+

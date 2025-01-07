@@ -2,7 +2,7 @@
 {% block content %}
     <h1> Invoice Details</h1>
 
-            <h4>Inv. no. {{invoice.number}} dated on {{invoice.date}} </h4>
+            <h4>Inv. no. {{invoice.number}} dated on {{invoice.date|date:"D, M. d, Y"}} </h4>
             <p>Total: {{invoice.total}} MGA</p>     
             <p>Total sm : {{invoice.total_sm}} MGA</p>     
             <p>Discount : {{invoice.discount}} MGA</p>   
