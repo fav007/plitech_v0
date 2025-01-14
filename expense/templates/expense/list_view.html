@@ -1,20 +1,33 @@
 {% extends 'customers/base.html' %}
-
 {% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">List of Expenses</h1>
 
-<h1>List of expenses</h1>
+    <!-- Responsive Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Account</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Total (MGA)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date|date:"D, M. d, Y" }}</td>
+                    <td>{{ expense.get_category_display }}</td>
+                    <td>{{ expense.acn }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td>{{ expense.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-<ul>
-        {% for expense in expenses %}
-
-                <li>
-                        {{ expense.date }} {{ expense.get_category_display }}
-                        {{ expense.acn }}
-                        {{ expense.description }}
-                        {{ expense.total }}
-                </li>
-                
-        {% endfor %}
-
-</ul>
+</div>
 {% endblock content %}

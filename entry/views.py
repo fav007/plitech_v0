@@ -1,11 +1,12 @@
 from typing import Any
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.views.generic import CreateView, ListView ,UpdateView , DetailView
 from .models import BE,BE_line,Customers,Invoice,InvoiceLine,Banknote
-from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm,InvoiceSearchForm
+from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm,InvoiceSearchForm,InvoicePaymentForm
 from django.urls import reverse_lazy
+from django.db.models import Sum
 
 class BECreateView(CreateView):
     model = BE
@@ -18,6 +19,7 @@ class BEListView(ListView):
     template_name = 'entry/be_list.html'
     context_object_name = 'bes'
     ordering = ['-id']
+
     
 class BEListNoInvView(ListView):
     model = BE
@@ -27,8 +29,7 @@ class BEListNoInvView(ListView):
     def get_queryset(self):
         return BE.objects.filter(invoice__isnull=True).order_by("-id")
     
-    
-    
+        
 class BEDetailsView(DetailView):
     model = BE
     template_name = 'entry/be_details.html'
@@ -80,6 +81,19 @@ def add_lines_be_view(request,pk):
     context={'be':be}
     return render(request,template_name='entry/try.html',context=context)
 
+class InvoiceMakePaymentView(UpdateView): 
+    model = Invoice 
+    form_class = InvoicePaymentForm 
+    template_name = 'entry/invoice_make_payment.html' 
+    success_url = reverse_lazy('invoice-list')
+    
+    def form_valid(self, form): 
+        response = super().form_valid(form) 
+        invoice = self.object
+        invoice.calculate_total() # Call calculate_total to update balanced_due return response
+        return response
+    
+    
 
 class InvoiceCreateView(CreateView):
     model = Invoice
@@ -97,6 +111,22 @@ class InvoiceCreateView(CreateView):
     def form_valid(self, form):
         # Get the ModelA instance based on the ID from the URL
         be = get_object_or_404(BE, pk=self.kwargs['pk'])
+        
+        if Invoice.objects.filter(be=be).exists():
+            # Return a custom error page with a return button
+            error_message = """
+                <html>
+                    <body>
+                        <h2>This BE already has an associated Invoice.</h2>
+                        <a href="/entry/list_invoice/">
+                            <button>Return to Invoice List</button>
+                        </a>
+                    </body>
+                </html>
+            """
+            return HttpResponse(error_message)
+        
+        
         # Associate the ModelA instance with ModelB and save
         form.instance.be = be
         return super().form_valid(form)
@@ -125,10 +155,14 @@ class InvoiceAddLineView(CreateView):
         return context
       
     def form_valid(self, form):
+        # Set the invoice explicitly if it's not set by the form
+        invoice = get_object_or_404(Invoice, pk=self.kwargs['pk'])
+        form.instance.invoice = invoice  # Associate this line with the correct invoice
+        
+        self.object = form.save()  # Save the new InvoiceLine
 
-        self.object = form.save()
-        pk = self.object.invoice.pk
-        self.success_url = reverse_lazy('invoice-add_lines', kwargs={'pk': pk})
+        # Redirect to add more lines for the same invoice
+        self.success_url = reverse_lazy('invoice-add_lines', kwargs={'pk': self.object.invoice.pk})
         return super().form_valid(form)
     
 class InvoiceDetailView(DetailView):
@@ -168,6 +202,17 @@ class InvoiceDetailSearchView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = InvoiceSearchForm(self.request.GET or None)
         return context
+
+def invoice_pay_balance(request, pk):
+    # Retrieve the invoice
+    invoice = get_object_or_404(Invoice, pk=pk)
+    
+    # Update the paid_status to "FP" (Fully Paid)
+    invoice.paid_status = "FP"
+    invoice.save()
+    
+    # Redirect to the invoice detail or list page
+    return redirect('invoice-list')
 
 def banknote_form(request):
     context = {}

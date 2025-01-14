@@ -1,28 +1,110 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-    <h1> Invoice Details</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Invoice Details</h1>
 
-            <h4>Inv. no. {{invoice.number}} dated on {{invoice.date|date:"D, M. d, Y"}} </h4>
-            <p>Total: {{invoice.total}} MGA</p>     
-            <p>Total sm : {{invoice.total_sm}} MGA</p>     
-            <p>Discount : {{invoice.discount}} MGA</p>   
-            <p>Metal scrap: {{invoice.metal_scrap}}</p> 
-            
+    <div class="card shadow-sm mb-4 {% if invoice.paid_status == 'NP' %}bg-light text-dark{% elif invoice.paid_status == 'PP' %}bg-warning-light text-dark{% elif invoice.paid_status == 'FP' %}bg-success-light text-dark{% endif %}">
 
-    <hr>
-            <ul>
-                {% for item in items %}
-                    <li> {{ item.qty }} 
-                        {{ item.item }}
-                        F:{{item.fini}} D:{{item.dvlp}} H:{{item.height}}
-                        {{item.be_line.type}}
-                        {{item.be_line.thickness}}
-                        {{ item.unit_price}} MGA
-                        [{{ item.description }}]*
-                    </li> 
-                {% endfor %}
-            </ul>
+        <div class="card-body">
+            <h4 class="card-title">Invoice No. {{ invoice.number }}</h4>
+            <p class="card-text">
+                <strong>Date:</strong> {{ invoice.date|date:"D, M. d, Y" }} <br>
+                <strong>Customer:</strong> {{ invoice.be.customers.title }} {{ invoice.be.customers.name }} <br>
+                <hr>
+                <strong>Metal sheet:</strong> {{ invoice.be.sm_eqv |floatformat:"2"}}  <br>
+                <hr>
+                <strong>Grand Total:</strong> {{ invoice.grand_total }} MGA <br>
+                <strong>Total:</strong> {{ invoice.total }} MGA <br>
+                <strong>Total SM:</strong> {{ invoice.total_sm }} MGA <br>
+                <strong>Discount:</strong> {{ invoice.discount }} MGA <br>
+                <strong>Advance:</strong> {{ invoice.advance }} MGA <br>
+                <strong>Balanced due:</strong> {{ invoice.balanced_due }} MGA <br>
+                <strong>Payment Status:</strong> {{ invoice.paid_status }}
+                <hr>
+                <strong>Metal Scrap:</strong> {{ invoice.metal_scrap }} <br>
+                
+            </p>
+        </div>
+    </div>
+    
+    <h2 class="mb-4">Invoice Items</h2>
+    <table class="table table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th scope="col">Qty</th>
+                <th scope="col">Item</th>
+                <th scope="col">Fini</th>
+                <th scope="col">Dvlp</th>
+                <th scope="col">Height</th>
+                <th scope="col">Type</th>
+                <th scope="col">Thickness</th>
+                <th scope="col">Unit Price (MGA)</th>
+                <th scope="col">Total (MGA)</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.qty }}</td>
+                <td>{{ item.item }}</td>
+                <td>{{ item.fini }}</td>
+                <td>{{ item.dvlp }}</td>
+                <td>{{ item.height }}</td>
+                <td>{{ item.be_line.type }}</td>
+                <td>{{ item.be_line.thickness }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.total }}</td>
+                <td>{{ item.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if invoice.paid_status == "NP" %}
+    <a href="{% url 'invoice-add_lines' invoice.pk %}" class="btn btn-info mt-3">
+        <i class="fas fa-plus-circle"></i> Add Lines
+    </a>
+    {% endif %}
+    {% comment %} <a href="#" class="btn btn-warning mt-3">
+        <i class="fas fa-check-circle"></i> Finalize Invoice
+    </a> {% endcomment %}
+    {% if invoice.paid_status == "NP" %}
+    <a href="{% url 'invoice-make-payment' invoice.pk %}" class="btn btn-success mt-3">
+        <i class="fas fa-credit-card"></i> Make Payment
+    </a>
+    {% endif %}
 
+    {% if invoice.paid_status == "PP" %}
+    <a href="{% url 'pay-balance' invoice.pk %}" class="btn btn-primary" class="btn btn-primary" onclick="alert('Fully Paid Successfull')">
+        <i class="fas fa-wallet"></i> Pay Balance
+    </a>
+    {% endif %}
 
-<a href="{% url 'invoice-add_lines' invoice.pk %}"> Add_lines </a>
+    {% if invoice.paid_status == "FP" %}
+    <a href="#" class="btn btn-danger">
+        <i class="fas fa-door-open"></i> Exit Now
+    </a>
+    {% endif %}
+    
+    
+</div>
+
+<style>
+    .bg-light {
+        background-color: #f8f9fa !important; /* Light grey for all invoices */
+    }
+    
+    .bg-warning-light {
+        background-color: #fff3cd !important; /* Lighter yellow for partial payments */
+    }
+    
+    .bg-success-light {
+        background-color: #d4edda !important; /* Lighter green for fully paid invoices */
+    }
+    
+    .text-dark {
+        color: #343a40 !important; /* Dark text for readability */
+    }
+    
+</style>
 {% endblock content %}

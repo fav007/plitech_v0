@@ -18,7 +18,7 @@ class ExpenseForm(forms.ModelForm):
 class JiramaForm(forms.ModelForm):
     class Meta:
         model = Jirama
-        fields = '__all__'
+        exclude = ["kw"]
         
     date = forms.DateField(
         label='Date',

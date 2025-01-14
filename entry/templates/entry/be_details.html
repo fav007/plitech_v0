@@ -1,47 +1,67 @@
 {% extends 'customers/base.html' %}
 {% block content %}
-    <h1> Ticket Entry Details</h1>
+    <h1 class="text-center my-4">Ticket Entry Details</h1>
     <hr>
-    <h3> ID : TK-{{be.pk|stringformat:'05d'}}</h3>
-    <h4>{{ be.customers.name | upper}}</h4>
-        
-        <p>Date :    {{ be.date_entry | upper}}</p>
-        <p>Time :    {{ be.time_entry }}</p>
-        <p>Qty  : {{ total_qty }}</p>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>ID: <span class="text-primary">TK-{{be.pk|stringformat:'05d'}}</span></h3>
+            <h4 class="text-uppercase">{{ be.customers.name }}</h4>
+        </div>
+        <div class="col-md-6 text-right">
+            <p><strong>Date:</strong> {{ be.date_entry | upper }}</p>
+            <p><strong>Time:</strong> {{ be.time_entry }}</p>
+            <p><strong>Qty:</strong> {{ total_qty }}</p>
+        </div>
+    </div>
 
     <hr>
+    
     <h2>Ticket Entry Lines</h2>
-
+    
     {% if be.be_lines.all %}
-        
-    <ul>
-        {% for line in be.be_lines.all %}
-            <li> {{ line.qty | stringformat:'3s' }}
-                 {{ line.type }} 
-                 {{ line.thickness }}
-                 {{ line.length }} x {{ line.width }}
-                 [{{ line.owner }}]
-                 {% if line.length != 2_000 %}
-                 *
-                 {% endif %}
-            </li>
-
-        {% endfor %}
-        <strong>{{ pcs }} pcs Equiv. to: {{ total_qty }} </strong>
-    </ul>
-
+        <ul class="list-group">
+            {% for line in be.be_lines.all %}
+                <li class="list-group-item">
+                    <span class="badge badge-secondary">{{ line.qty | stringformat:'3s' }}</span>
+                    <strong>{{ line.type }}</strong> 
+                    <span class="text-muted">{{ line.thickness }}</span>
+                    <span class="text-info">{{ line.length }} x {{ line.width }}</span>
+                    <span class="text-success">[{{ line.owner }}]</span>
+                    {% if line.length != 2_000 %}
+                        <span class="text-danger">*</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        <hr>
+        <p class="font-weight-bold">{{ pcs }} pcs Equiv. to: {{ total_qty }}</p>
     {% else %}
-
-    Not yet TK entered
-
+        <p class="text-muted">Not yet TK entered</p>
     {% endif %}
 
-
-    
-
     <hr>
-     <!-- <a href="{% url 'be-update' be.pk %}"> Update </a> | -->
-    <a href="{% url 'be-add_lines' be.pk %}"> Add Lines </a> |
-    <a href="{% url 'invoice-create' be.pk %}"> Add Invoice </a> 
+    
+    <div class="d-flex justify-content-between align-items-center">
+        {% if be.status == 'E' %}
 
+        <div>
+            <a href="{% url 'be-add_lines' be.pk %}" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Add Lines
+            </a>
+        </div>
+        
+            <div>
+                <a href="{% url 'invoice-create' be.pk %}" class="btn btn-primary">
+                    <i class="fas fa-file-invoice"></i> Add Invoice
+                </a>
+            </div>
+        {% else %}
+
+        <a href="{% url 'invoice-detail' be.invoice.pk %}" class="btn btn-primary">
+            <i class="fas fa-file-invoice"></i> View Invoice
+        </a>
+
+        {% endif %}
+    </div>
 {% endblock content %}

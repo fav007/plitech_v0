@@ -4,7 +4,7 @@
 <h1>Invoice create or add a New Lines</h1>
 
 <hr>
-INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
+INV-{{invoice.number}} | BE-{{invoice.be.pk}} | Total: {{ invoice.total }} MGA</h4>
 <hr>
 {% if items %}
 <ul>
@@ -16,7 +16,9 @@ INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
             {{item.be_line.thickness}}
             {{ item.unit_price}} MGA
             [{{ description }}]*
+            = {{item.total}}
         </li> 
+        
     {% endfor %}
 </ul>
 {% else %}
@@ -28,9 +30,10 @@ INV-{{invoice.number}} | BE-{{invoice.be.pk}}</h4>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Add Line</button>
+        <button class="btn btn-secondary btn-sm" type="submit">Add Line</button>
+        <a class="btn btn-success btn-sm" href="{% url 'invoice-detail' invoice.pk %}"> Confirm </a>
+
     </form>
 
-    <a href="{% url 'invoice-detail' invoice.pk %}"> OK </a>
-
+    
 {% endblock content %}

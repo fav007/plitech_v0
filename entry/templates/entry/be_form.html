@@ -32,11 +32,11 @@
             <small class="form-text text-muted">{{ form.customers.help_text }}</small>
         </div>
 
-        <button type="submit" class="btn btn-primary w-20">
+        <button type="submit" class="btn btn-primary w-20" onclick="alert('Ticket entry created')">
             <i class="fa fa-save"></i> Save Entry
         </button>
-        <a href="{% url 'home' %}" class="btn btn-secondary">
+        <a href="{% url 'be-list' %}" class="btn btn-secondary">
             <i class="fa fa-arrow-left"></i> Return 
         </a>
 
-{% endblock content %}
+{% endblock %}

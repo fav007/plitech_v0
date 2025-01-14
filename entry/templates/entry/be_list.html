@@ -1,16 +1,50 @@
 {% extends 'customers/base.html' %}
+
+
 {% block content %}
-<h1>Ticket Entry List</h1>
 
-<ul>
-    {% for be in bes %}
-        
-        <p> 
-            <a href="{% url 'be-details' be.id %}">BE N°{{be.id|stringformat:"05d"}} </a> {{be.date_entry }} - {{be.time_entry }} - {{be.customers.name|upper}}
-            - {{be.status}}
-            <!-- <a href="{% url 'be-add_lines' be.id %}">add lines</a> -->
-        </p>
 
-    {% endfor %}
-</ul>
+<div class="container mt-5">
+    <h1 class="mb-4">Ticket Entry List</h1>
+
+    <!-- Responsive Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">Ticket Number</th>
+                    <th scope="col">Entry Date</th>
+                    <th scope="col">Entry Time</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Sm-Eqv</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for be in bes %}
+                <tr>
+                    <td>
+                        <a href="{% url 'be-details' be.id %}" class="text-decoration-none">
+                            BE N°{{ be.id|stringformat:"05d" }}
+                        </a>
+                    </td>
+                    <td>{{ be.date_entry|date:"D, M. d, Y" }}</td>
+                    <td>{{ be.time_entry|time:"H:i" }}</td>
+                    <td>{{ be.customers.name|upper }}</td>
+                    <td>{{ be.sm_eqv|floatformat:"1" }}</td>
+                    <td>{{ be.status }}</td>
+                    <td>
+                        <!-- Uncomment below to add "Add Lines" link -->
+                        <!-- <a href="{% url 'be-add_lines' be.id %}" class="btn btn-sm btn-primary">Add Lines</a> -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
 {% endblock content %}

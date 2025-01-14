@@ -10,7 +10,7 @@ class BE(models.Model):
     ('B', 'Billed'),
     ('I', 'In progress'),
     ('C', 'Completed'),
-    ('O','Out')
+    ('O','Out'),
 ]
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -21,6 +21,12 @@ class BE(models.Model):
     
     def __str__(self) -> str:
         return f"ref bl-{self.pk} date:{self.date_entry} for customers:{self.customers.name}"
+    
+    @property
+    def sm_eqv(self):
+        # Calculate the sum of sm_eqv from related BE_line instances
+        sm_eqv = self.be_lines.aggregate(total_sm_eqv=Sum('sm_eqv'))['total_sm_eqv']
+        return sm_eqv if sm_eqv else 0
 
 class BE_line(models.Model):
     METAL_TYPE_CHOICES = [
@@ -76,18 +82,40 @@ class BE_line(models.Model):
     
 class Invoice(models.Model):
     
+    PAYMENT_STATUS_CHOICES = [
+        ("NP","Not Paid"),
+        ("PP","Partially Paid"),
+        ("FP","Fully Paid")
+    ]
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     number = models.IntegerField(unique=True)
     date = models.DateField(default=timezone.now)
+    advance = models.IntegerField('initial payment',default=0)
     total = models.IntegerField('Total machine fees',default=0)
     total_sm = models.IntegerField('Total metal price',default=0)
     discount = models.IntegerField('discount',default=0)
+    grand_total = models.IntegerField('Grand total',default=0)
+    balanced_due = models.IntegerField('Balance Due',default=0)
     metal_scrap = models.DecimalField("Metal SCRAP",max_digits=10,decimal_places=5,default=0)
+    paid_status = models.CharField(choices=PAYMENT_STATUS_CHOICES, max_length=2,default="NP")
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
     
+    def calculate_total(self): 
+        self.grand_total = self.total + self.total_sm - self.discount
+        self.balanced_due = self.grand_total - self.advance
+        if self.advance >= self.grand_total: 
+            self.paid_status = "FP" 
+        elif self.advance > 0:
+            self.paid_status = "PP"
+        else:
+            self.paid_status = "NP"
+            
+        self.save()
+    
     def save(self, *args, **kwargs):
-        # Update the BE status to 'I' when an invoice is created
+
         self.be.status = 'B'
         self.be.save()
 
@@ -100,7 +128,7 @@ class Invoice(models.Model):
 class InvoiceLine(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    qty = models.IntegerField(default=1)
+    qty = models.PositiveIntegerField(default=1)
     item = models.CharField(max_length=20)
     unit_price = models.IntegerField()
     fini = models.IntegerField()
@@ -109,6 +137,17 @@ class InvoiceLine(models.Model):
     description = models.CharField(max_length=200,null=True,blank=True)
     invoice = models.ForeignKey(Invoice,on_delete=models.CASCADE,related_name='invoice_lines')  
     be_line = models.ForeignKey(BE_line,on_delete=models.CASCADE) 
+    
+    @property
+    def total(self):
+        return self.qty * self.unit_price
+    
+    def save(self,*args, **kwargs):
+        if not self.pk: # Check if the line item is being created 
+            self.invoice.total += self.total
+        super().save(*args,**kwargs)
+        self.invoice.calculate_total()
+        self.invoice.save()
     
     
 class Banknote(models.Model):

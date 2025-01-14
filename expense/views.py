@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import CreateView,ListView,UpdateView
+from django.views.generic import CreateView,ListView,UpdateView,DeleteView
 from .models import Expense,Jirama
 from .forms import ExpenseForm,JiramaForm
 from django.urls import reverse_lazy
@@ -32,22 +32,8 @@ class JiramaListView(LoginRequiredMixin, ListView):
     model = Jirama
     template_name = 'expense/list_jirama.html'
     context_object_name = 'jiramas'
-    ordering = 'date'
+    ordering = '-date'
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # Calculate the difference between current and previous index
-        previous_index = None
-        for jirama in context['jiramas']:
-            if previous_index is None:
-                jirama.kw = None  # No previous index for the first item
-            else:
-                jirama.kw = jirama.index - previous_index  # Calculate difference
-            previous_index = jirama.index  # Update previous index
-        context['jiramas'] = context['jiramas'][::-1]
-        
-        return context
     
 # Update view to edit existing Jirama entry
 class JiramaUpdateView(LoginRequiredMixin,UpdateView):
@@ -55,4 +41,9 @@ class JiramaUpdateView(LoginRequiredMixin,UpdateView):
     form_class = JiramaForm
     template_name = 'expense/create_jirama.html'
     success_url = reverse_lazy('jirama-list')  # Redirect after successful update
+    
+class JiramaDeleteView(LoginRequiredMixin,DeleteView):
+    model = Jirama
+    success_url = reverse_lazy('jirama-list')
+    
     

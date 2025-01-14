@@ -1,0 +1,15 @@
+{% extends 'customers/base.html' %}
+{% block content %}
+<h1>Make payment</h1>
+
+<h3> Grand Total: {{ invoice.grand_total }} MGA </h3>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+<a href="{% url 'invoice-detail' invoice.pk %}">Return</a>
+
+{% endblock content %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (ExpenseCreateView,ExpenseListView,ExpenseUpdateView,
-                    JiramaCreateView,JiramaListView,JiramaUpdateView)
+                    JiramaCreateView,JiramaListView,JiramaUpdateView,JiramaDeleteView)
 
 urlpatterns = [
     path('create/',ExpenseCreateView.as_view(),name='expense-create'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('create_jirama/',JiramaCreateView.as_view(),name='jirama-create'),
     path('list_jirama/',JiramaListView.as_view(),name='jirama-list'),
     path('jirama/<int:pk>/edit/', JiramaUpdateView.as_view(), name='jirama-edit'),  # Edit an entry
+    path('jirama/<int:pk>/delete/', JiramaDeleteView.as_view(), name='jirama-delete'),
 ]

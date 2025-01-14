@@ -44,6 +44,13 @@ class Jirama(models.Model):
     
     date = models.DateField(default=timezone.now,unique=True)
     index = models.IntegerField()
+    kw = models.IntegerField(null=True)
+    
+    def save(self, *args, **kwargs):
+        # Fetch the previous record to calculate kw
+        previous_jirama = Jirama.objects.filter(date__lt=self.date).last()
+        self.kw = self.index - previous_jirama.index if previous_jirama else None
+        super().save(*args, **kwargs)
     
     
     def __str__(self):

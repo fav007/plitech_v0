@@ -52,10 +52,11 @@ class LineBEForm(forms.ModelForm):
         
 LineBEFormSet = inlineformset_factory(BE, BE_line, form=LineBEForm, extra=1 ,can_delete=True)
 
+
 class InvoiceForm(forms.ModelForm):
     class Meta:
         model = Invoice
-        exclude = ['be']
+        exclude = ['be','total','grand_total','balanced_due','paid']
         # fields = '__all__'
         
     date = forms.DateField(
@@ -63,12 +64,7 @@ class InvoiceForm(forms.ModelForm):
         widget=forms.DateInput(attrs={'type': 'date'}),  # Utilisation d'un widget datepicker en HTML
         input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y'],  # Formats de date acceptés
         initial=timezone.now)
-    
-    # be = forms.ModelChoiceField(
-    #         queryset=BE.objects.all(),
-    #         required=True,
-    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
-    #     )
+
     
 class InvoiceSearchForm(forms.Form):
     invoice_number = forms.IntegerField(
@@ -82,17 +78,25 @@ class InvoiceSearchForm(forms.Form):
 class InvoiceLineForm(forms.ModelForm):
     class Meta:
         model = InvoiceLine
-        fields = '__all__'
+        exclude = ["invoice"]
         widgets = {
             'description': forms.Textarea(),  # Adjust rows as needed
         }
+        
+    def __init__(self, *args, **kwargs):
+        # Accept the invoice instance from the view
+        invoice = kwargs.get('initial', {}).get('invoice')
 
-    # invoice = forms.ModelChoiceField(
-    #         queryset=Invoice.objects.all(),
-    #         required=True,
-    #         widget=forms.Select(attrs={'disabled': 'disabled'})  # Disable the 'be' widget
-    #     )
+        super().__init__(*args, **kwargs)
 
+        # If the invoice is provided, filter the 'be_line' choices
+        if invoice:
+            self.fields['be_line'].queryset = BE_line.objects.filter(be=invoice.be)
+
+class InvoicePaymentForm(forms.ModelForm):
+    class Meta:
+        model = Invoice
+        fields = ["advance","metal_scrap","discount"]
         
 class BanknoteForm(forms.ModelForm):
     class Meta:
