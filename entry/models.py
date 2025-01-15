@@ -100,6 +100,9 @@ class Invoice(models.Model):
     balanced_due = models.IntegerField('Balance Due',default=0)
     metal_scrap = models.DecimalField("Metal SCRAP",max_digits=10,decimal_places=5,default=0)
     paid_status = models.CharField(choices=PAYMENT_STATUS_CHOICES, max_length=2,default="NP")
+    exit_status = models.BooleanField(default=False)
+    exit_datetime = models.DateTimeField(null=True,blank=True)
+    is_fraud = models.BooleanField(default=False)
     be = models.OneToOneField(BE,on_delete=models.CASCADE)
     
     def calculate_total(self): 

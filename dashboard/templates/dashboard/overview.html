@@ -31,6 +31,7 @@
                     </div>
                 </div>
             </div>
+        
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
@@ -39,6 +40,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row text-center mt-3">
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
@@ -56,6 +59,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <hr>
+
+        <div class="row text-center mt-3">
+
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted">Average Order Value (AOV)</h5>
+                        <h3 class="card-text font-weight-bold">{{ average_order_value | default:"0" | floatformat:"0" }} MGA</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm border-light rounded">
+                    <div class="card-body">
+                        <h5 class="card-title text-muted">Purchase Frequency</h5>
+                        <h3 class="card-text font-weight-bold">{{ purchase_frequency | default:"0" | floatformat:"2" }} </h3>
+                    </div>
+                </div>
+            </div>
+            
         </div>
 
         <!-- Graph Section -->

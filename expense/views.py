@@ -15,6 +15,7 @@ class ExpenseListView(LoginRequiredMixin,ListView):
     model = Expense
     template_name = 'expense/list_view.html'
     context_object_name = 'expenses'
+    ordering = '-date'
     
 class ExpenseUpdateView(LoginRequiredMixin,UpdateView):
     model = Expense
@@ -33,6 +34,20 @@ class JiramaListView(LoginRequiredMixin, ListView):
     template_name = 'expense/list_jirama.html'
     context_object_name = 'jiramas'
     ordering = '-date'
+    
+    def get_context_data(self, **kwargs):
+        # Get the context from the superclass
+        context = super().get_context_data(**kwargs)
+
+        # Prepare data for the chart
+        labels = [jirama.date.strftime('%Y-%m-%d') for jirama in context['jiramas']][:-1][::-1]
+        data = [jirama.kw for jirama in context['jiramas']][:-1][::-1]
+
+        # Add chart data to the context
+        context['chart_labels'] = labels
+        context['chart_data'] = data
+
+        return context
     
     
 # Update view to edit existing Jirama entry

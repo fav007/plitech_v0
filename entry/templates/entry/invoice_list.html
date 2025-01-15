@@ -14,12 +14,19 @@
                     <th scope="col">Customer</th>
                     <th scope="col">Total (MGA)</th>
                     <th scope="col">Status</th>
+                    {% if user.is_superuser %}
+                        <th scope="col">Fraud Status</th>
+                    {% endif %}
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for invoice in invoices %}
-                <tr>
+                <tr
+                    {% if user.is_superuser %}
+                        style="background-color: {% if invoice.is_fraud %}#ffcccc{% elif invoice.paid_status == 'Paid' %}#ccffcc{% else %}inherit{% endif %};"
+                    {% endif %}
+                >
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>
                         <a href="{% url 'invoice-detail' invoice.pk %}" class="text-decoration-none">
@@ -31,6 +38,11 @@
                     <td>{{ invoice.be.customers.name }}</td>
                     <td>{{ invoice.total }}</td>
                     <td>{{ invoice.paid_status }}</td>
+                    {% if user.is_superuser %}
+                        <td style="color: {% if invoice.is_fraud %}red{% else %}green{% endif %};">
+                            {% if invoice.is_fraud %}Requires Review{% else %}Clear{% endif %}
+                        </td>
+                    {% endif %}
                     <td>
                         <a href="{% url 'invoice-detail' invoice.pk %}" class="btn btn-sm btn-primary">
                             View

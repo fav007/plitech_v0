@@ -19,6 +19,11 @@ def dashboard_overview(request):
     total_metal_revenue = Invoice.objects.aggregate(total_sm=Sum('total_sm'))['total_sm']
     total_sheet_metal = BE_line.objects.aggregate(total_sheet_metal=Sum('sm_eqv'))['total_sheet_metal']
     
+    #####################
+    # Markting indicator
+    #AVO - Panier moyen
+    average_order_value = total_revenue / total_invoices
+    purchase_frequency = total_invoices / total_customers
     # BE Status Breakdown
     be_statuses = BE.objects.values('status').annotate(count=Count('status'))
 
@@ -71,6 +76,8 @@ def dashboard_overview(request):
         'chart_data': chart_data,
         'revenue_chart_labels': revenue_chart_labels,
         'revenue_chart_data': revenue_chart_data,
+        'average_order_value':average_order_value,
+        'purchase_frequency':purchase_frequency
     }
 
     return render(request, 'dashboard/overview.html', context)

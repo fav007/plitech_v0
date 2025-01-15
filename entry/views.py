@@ -1,4 +1,6 @@
 from typing import Any
+from django.utils import timezone
+
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404,redirect
@@ -7,6 +9,7 @@ from .models import BE,BE_line,Customers,Invoice,InvoiceLine,Banknote
 from .forms import BEForm,LineBEForm,LineBEFormSet,InvoiceForm,InvoiceLineForm,BanknoteForm,InvoiceSearchForm,InvoicePaymentForm
 from django.urls import reverse_lazy
 from django.db.models import Sum
+
 
 class BECreateView(CreateView):
     model = BE
@@ -131,11 +134,15 @@ class InvoiceCreateView(CreateView):
         form.instance.be = be
         return super().form_valid(form)
     
+
+
+
 class InvoiceListView(ListView):
     model = Invoice
     template_name = 'entry/invoice_list.html'
     context_object_name = 'invoices'
     ordering = ['-id']
+
     
 
 class InvoiceAddLineView(CreateView):
@@ -213,6 +220,14 @@ def invoice_pay_balance(request, pk):
     
     # Redirect to the invoice detail or list page
     return redirect('invoice-list')
+
+def invoice_exit(request,pk):
+    invoice = get_object_or_404(Invoice,pk=pk)
+    invoice.exit_status = True
+    invoice.exit_datetime = timezone.now()
+    invoice.save()
+    
+    return redirect('invoice-detail',pk)
 
 def banknote_form(request):
     context = {}

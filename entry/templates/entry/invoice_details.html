@@ -81,9 +81,15 @@
     {% endif %}
 
     {% if invoice.paid_status == "FP" %}
-    <a href="#" class="btn btn-danger">
-        <i class="fas fa-door-open"></i> Exit Now
+        {% if invoice.exit_status == False %}
+    <a href="{% url 'invoice-exit' invoice.pk%}" class="btn btn-danger" onclick="alert('Metal exited')">
+        <i class="fas fa-door-open" ></i> Exit Now
     </a>
+    <p class="text-success mt-4">The flat bent sheets are still in the workshop.</p>
+        {% else %}
+
+        <p class="text-danger font-weight-bold">The flat bent sheets have left the workshop at {{invoice.exit_datetime|default:"not yet recorded"}}</p>
+        {% endif %}
     {% endif %}
     
     
